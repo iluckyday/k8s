@@ -12,7 +12,7 @@ before_install:
   - sudo chmod +x /usr/local/bin/minikube
 
 script:
-  - /bin/bash minikube/build-cache.sh
+  - sudo /bin/bash minikube/build-cache.sh
 
 after_success:
   - /bin/bash minikube/ffsend.sh
