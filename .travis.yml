@@ -3,16 +3,15 @@ dist: bionic
 language: shell
 
 before_install:
-#  - sudo rm -rf /etc/apt/sources.list.d
-#  - sudo sed -i '/src/d' /etc/apt/sources.list
-#  - sudo apt-get update
-#  - sudo apt-get -y install qemu-system-x86 libvirt-daemon-system
-#  - sudo usermod -G libvirt,kvm travis
+  - sudo rm -rf /etc/apt/sources.list.d
+  - sudo sed -i '/src/d' /etc/apt/sources.list
+  - sudo apt-get update
+  - sudo apt-get -y install qemu-system-x86 libvirt-daemon-system
   - sudo curl -skLo /usr/local/bin/minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
   - sudo chmod +x /usr/local/bin/minikube
 
 script:
-  - sudo /bin/bash minikube/build-cache.sh
+  - /bin/bash minikube/build-cache.sh
 
 after_success:
   - /bin/bash minikube/ffsend.sh
