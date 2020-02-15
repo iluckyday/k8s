@@ -1,0 +1,17 @@
+os: linux
+dist: bionic
+language: shell
+
+before_install:
+  - sudo rm -rf /etc/apt/sources.list.d
+  - sudo sed -i '/src/d' /etc/apt/sources.list
+  - sudo apt-get update
+  - sudo apt-get -y install libvirt-clients
+  - sudo curl -skLo /usr/local/bin/minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+  - sudo chmod +x /usr/local/bin/minikube
+
+script:
+  - /bin/bash minikube/build-cache.sh
+
+after_success:
+  - /bin/bash minikube/ffsend.sh
