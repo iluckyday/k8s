@@ -1,0 +1,7 @@
+[Unit]
+Description=kube init script
+
+[Service]
+ExecStart=/usr/sbin/kube-init.sh
+Type=oneshot
+RemainAfterExit=true

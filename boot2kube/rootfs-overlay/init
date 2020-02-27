@@ -1,0 +1,6 @@
+#!/bin/sh
+mkdir /sysroot
+mount -t tmpfs -o size=90% tmpfs /sysroot
+tar -C / --exclude=sysroot -cf - . | tar -C /sysroot/ -xf -
+/bin/mount -t devtmpfs devtmpfs /sysroot/dev
+exec /sbin/switch_root /sysroot /sbin/init "$@"
