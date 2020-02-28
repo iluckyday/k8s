@@ -1,6 +1,8 @@
 #!/bin/bash
 
 git clone --depth=1 https://github.com/buildroot/buildroot
-make -j2 BOOT2KUBE=../../boot2kube KCONFIG_ALLCONFIG=../boot2kube/build.defconfig -C buildroot
-make -j2 -C buildroot
-cp buildroot/output/images/rootfs.iso9660 /tmp/boot2kube.iso
+export BOOT2KUBE=$HOME/work/k8s/k8s/boot2kube KCONFIG_ALLCONFIG=$HOME/work/k8s/k8s/boot2kube/build.defconfig
+cd builroot
+make allnoconfig
+make -j2
+cp output/images/rootfs.iso9660 /tmp/boot2kube.iso
