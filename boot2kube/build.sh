@@ -1,4 +1,5 @@
 #!/bin/bash
+set -ex
 
 git clone --depth=1 https://github.com/buildroot/buildroot /tmp/buildroot
 make -j2 build.config -C /tmp/buildroot
