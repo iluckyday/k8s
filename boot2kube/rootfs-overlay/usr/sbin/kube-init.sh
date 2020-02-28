@@ -12,7 +12,7 @@ ip link set eth0 up
 ip address add $IP/24 dev eth0
 ip route add default via $GW
 
-until wget -qO /tmp/run.sh http://w.s/files/k8s/minikubeiso/run.sh
+until wget -qO /tmp/run.sh http://server/boot2kube/run.sh
 do
         sleep 2
 done

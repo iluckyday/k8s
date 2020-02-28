@@ -2,7 +2,7 @@
 
 apt-get update
 apt-get install -y apt dpkg apt-utils ca-certificates
-apt-get upgrade -y
+#apt-get upgrade -y
 apt-get install -y libelf-dev
 
 git clone --depth=1 https://github.com/buildroot/buildroot
@@ -10,4 +10,7 @@ export KCONFIG_ALLCONFIG=$HOME/work/k8s/k8s/boot2kube/build.defconfig
 cd buildroot
 make -s -j"$(nproc)" allnoconfig
 make -s -j"$(nproc)"
-cp output/images/rootfs.iso9660 /tmp/boot2kube.iso
+
+d=$(date "+%Y%m%d")
+cp output/images/rootfs.iso9660 /tmp/boot2kube-$d.iso
+ls -lh /tmp/boot2kube-$d.iso

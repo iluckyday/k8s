@@ -1,6 +1,8 @@
 name: GitHub CI
 
 on:
+  schedule:
+    - cron:  "0 0 * * 0"
   push:
     branches:
     - master
@@ -21,4 +23,4 @@ jobs:
           chmod +x /tmp/ffsend
 
       - name: Push to Firefox Send
-        run: /tmp/ffsend -Ifyq upload /tmp/boot2kube.iso
+        run: /tmp/ffsend -Ifyq upload /tmp/boot2kube-*.iso
