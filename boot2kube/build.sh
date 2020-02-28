@@ -12,5 +12,5 @@ make -s -j"$(nproc)" allnoconfig
 make -s -j"$(nproc)"
 
 d=$(date "+%Y%m%d")
-cp output/images/rootfs.iso9660 /tmp/boot2kube-$d.iso
-ls -lh /tmp/boot2kube-$d.iso
+cp output/images/rootfs.iso9660 /dev/shm/boot2kube-$d.iso
+ls -lh /dev/shm/boot2kube-$d.iso
