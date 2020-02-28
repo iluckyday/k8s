@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v1
 
       - name: Build boot2kube.iso
-        run: sudo /bin/bash -ex boot2kube/build.sh
+        run: sudo /bin/bash boot2kube/build.sh
 
       - name: Install ffsend
         run: |
