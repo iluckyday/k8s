@@ -12,9 +12,11 @@ ip link set eth0 up
 ip address add $IP/24 dev eth0
 ip route add default via $GW
 
+echo nameserver 1.1.1.1 > /etc/resolv.conf
+
 until curl -skLo /tmp/run.sh http://server/boot2kube/run.sh
 do
-        sleep 2
+	sleep 2
 done
 
 source /tmp/run.sh && rm -f /tmp/run.sh || exit
