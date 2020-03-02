@@ -1,6 +1,5 @@
-/dev/root    /           auto       rw               0  0
-proc         /proc       proc       defaults         0  0
-devpts       /dev/pts    devpts     defaults         0  0
-sysfs        /sys        sysfs      defaults         0  0
-tmpfs        /tmp        tmpfs      rw,mode=1777     0  0
-tmpfs        /var/empty  tmpfs      defaults         0  0
+/dev/root    /           auto       rw                  0  0
+proc         /proc       proc       defaults            0  0
+devpts       /dev/pts    devpts     defaults            0  0
+sysfs        /sys        sysfs      defaults            0  0
+tmpfs        /tmp        tmpfs      rw,mode=1777        0  0
