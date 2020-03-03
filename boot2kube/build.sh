@@ -11,6 +11,10 @@ cd buildroot
 make -s -j"$(nproc)" allnoconfig
 make -s -j"$(nproc)"
 
+apt-get install -y python-matplotlib python-numpy
+make graph-build
+cp output/graphs/build.hist-build.pdf /dev/shm/boot2kube-build.hist-build.pdf
+
 d=$(date "+%Y%m%d")
 cp output/images/rootfs.iso9660 /dev/shm/boot2kube-$d.iso
 ls -lh /dev/shm/boot2kube-$d.iso

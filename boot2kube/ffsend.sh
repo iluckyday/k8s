@@ -5,6 +5,8 @@ ffsend_ver="$(curl -skL https://api.github.com/repos/timvisee/ffsend/releases/la
 curl -skL -o /tmp/ffsend https://github.com/timvisee/ffsend/releases/download/"$ffsend_ver"/ffsend-"$ffsend_ver"-linux-x64-static
 chmod +x /tmp/ffsend
 
+/tmp/ffsend -Ifyq upload /dev/shm/boot2kube-build.hist-build.pdf
+
 PFILE=$(ls /dev/shm/boot2kube-*.iso)
 FFSEND_URL=$(/tmp/ffsend -Ifyq upload ${PFILE})
 FFSEND_URL=${FFSEND_URL/\#/%23}
