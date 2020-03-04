@@ -4,7 +4,7 @@ After=network.target
 StartLimitIntervalSec=0
 
 [Service]
-ExecStartPre=/usr/bin/mkdir /var/empty
+ExecStartPre=/usr/bin/mkdir -p /var/empty
 ExecStartPre=/usr/bin/ssh-keygen -A
 ExecStart=/usr/sbin/sshd -D -e
 ExecReload=/bin/kill -HUP $MAINPID
