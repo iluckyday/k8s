@@ -25,3 +25,4 @@ done
 unset i
 
 [ -r /tmp/run.sh ] && source /tmp/run.sh && rm -f /tmp/run.sh
+rm -f -- "$0"
