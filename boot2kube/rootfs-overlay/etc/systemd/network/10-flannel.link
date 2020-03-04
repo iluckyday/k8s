@@ -1,0 +1,6 @@
+[Match]
+OriginalName=flannel*
+TYPE=vxlan
+
+[Link]
+MACAddressPolicy=none
