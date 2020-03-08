@@ -1,6 +1,6 @@
 #!/bin/sh
 
-udhcpc -n -q -R -f -i ens10
+udhcpc -n -q -f -i enp0s10
 
 i=0
 while [ $i -lt 5 ]; do
