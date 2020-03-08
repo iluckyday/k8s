@@ -3,7 +3,5 @@ Description=kube init script
 
 [Service]
 ExecStart=/usr/sbin/kube-init.sh
-ExecStartPost=/bin/rm -f /etc/systemd/system/kube-init.service /etc/systemd/system/multi-user.target.wants/kube-init.service
-ExecStartPost=/bin/systemctl daemon-reload
 Type=oneshot
 RemainAfterExit=true
