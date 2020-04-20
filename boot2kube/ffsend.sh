@@ -7,9 +7,11 @@ chmod +x /tmp/ffsend
 
 /tmp/ffsend -Ifyq upload /dev/shm/boot2kube-build.hist-build.pdf
 
-PFILE=$(ls /dev/shm/boot2kube-*.iso)
-FFSEND_URL=$(/tmp/ffsend -Ifyq upload ${PFILE})
-FFSEND_URL=${FFSEND_URL/\#/%23}
-FILE=$(basename $PFILE)
-data="$FILE""-""$FFSEND_URL"
-curl -skL "http://wxpusher.zjiecode.com/api/send/message/?appToken=${WXPUSHER_APPTOKEN}&uid=${WXPUSHER_UID}&content=${data}" >/dev/null 2>&1
+for f in /dev/shm/boot2kube-*.iso; do
+	SIZE="$(du -h $f | awk '{print $1}')"
+	FFSEND_URL=$(/tmp/ffsend -Ifyq upload $f)
+	FFSEND_URL=${FFSEND_URL/\#/%23}
+	FILE=$(basename $f)
+	data="$FILE-$SIZE-$FFSEND_URL"
+	curl -skLo /dev/null "http://wxpusher.zjiecode.com/api/send/message/?appToken=${WXPUSHER_APPTOKEN}&uid=${WXPUSHER_UID}&content=${data}"
+done
