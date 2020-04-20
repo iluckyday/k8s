@@ -11,5 +11,5 @@ PFILE=$(ls /dev/shm/boot2kube-*.iso)
 FFSEND_URL=$(/tmp/ffsend -Ifyq upload ${PFILE})
 FFSEND_URL=${FFSEND_URL/\#/%23}
 FILE=$(basename $PFILE)
-data="$FILE""$FFSEND_URL"
-curl -skL "http://wxpusher.zjiecode.com/api/send/message/?appToken=${WXPUSHER_APPTOKEN}&uid=${WXPUSHER_UID}&content=${data}" >/dev/null &2>1
+data="$FILE""-""$FFSEND_URL"
+curl -skL "http://wxpusher.zjiecode.com/api/send/message/?appToken=${WXPUSHER_APPTOKEN}&uid=${WXPUSHER_UID}&content=${data}" >/dev/null 2>&1
