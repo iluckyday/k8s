@@ -9,7 +9,7 @@ export KCONFIG_ALLCONFIG=$HOME/work/k8s/k8s/boot2kube/build.config
 cd buildroot
 
 gnum=$(sed -n '/ROOTFS_ISO9660_CMD/=' fs/iso9660/iso9660.mk)
-sed -i ''$gnum' i \techo "Boot2Kube $(date "+%Y%m%d")" > $(ROOTFS_ISO9660_TMP_TARGET_DIR)/version' fs/iso9660/iso9660.mk
+sed -in ''$gnum' i \\techo "Boot2Kube $(date "+%Y%m%d")" > $(ROOTFS_ISO9660_TMP_TARGET_DIR)/version' fs/iso9660/iso9660.mk
 
 make -s -j"$(nproc)" allnoconfig
 make -s -j"$(nproc)"
