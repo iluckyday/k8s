@@ -17,7 +17,7 @@ jobs:
         run: sudo /bin/bash boot2kube/build.sh
 
       - name: Push to Firefox Send
-        run: /bin/bash boot2kube/ffsend.sh
+        run: /bin/bash boot2kube/transfer.sh
         env:
           WXPUSHER_APPTOKEN: ${{ secrets.WXPUSHER_APPTOKEN }}
           WXPUSHER_UID: ${{ secrets.WXPUSHER_UID }}
