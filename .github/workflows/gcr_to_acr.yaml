@@ -1,0 +1,25 @@
+name: GitHub CI
+
+on:
+  schedule:
+    - cron:  "0 0 * * 0"
+  push:
+    branches:
+    - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: pip install
+        run: sudo pip3 install aliyun-python-sdk-core aliyun-python-sdk-cr
+
+      - name: running
+        run: sudo python3 gcr_to_acr.py
+        env:
+          ACR_KEYID: ${{ secrets.ACR_KEYID }}
+          ACR_SECRET: ${{ secrets.ACR_SECRET }}
+          ACR_DOCKER_USERNAME: ${{ secrets.ACR_DOCKER_USERNAME }}
+          ACR_DOCKER_PASSWORD: ${{ secrets.ACR_DOCKER_PASSWORD }}

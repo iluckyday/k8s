@@ -1,0 +1,7 @@
+gcr.io/google_containers/kube-apiserver:registry.cn-chengdu.aliyuncs.com/cdgcr/kube-apiserver:^v\d+.\d+.\d+$
+gcr.io/google_containers/kube-controller-manager:registry.cn-chengdu.aliyuncs.com/cdgcr/kube-controller-manager:^v\d+.\d+.\d+$
+gcr.io/google_containers/kube-scheduler:registry.cn-chengdu.aliyuncs.com/cdgcr/kube-scheduler:^v\d+.\d+.\d+$
+gcr.io/google_containers/kube-proxy:registry.cn-chengdu.aliyuncs.com/cdgcr/kube-proxy:^v\d+.\d+.\d+$
+gcr.io/google_containers/pause:registry.cn-chengdu.aliyuncs.com/cdgcr/pause:^\d+.\d+$
+gcr.io/google_containers/etcd:registry.cn-chengdu.aliyuncs.com/cdgcr/etcd:^\d+.\d+.\d+$
+gcr.io/google_containers/coredns:registry.cn-chengdu.aliyuncs.com/cdgcr/coredns:^\d+.\d+.\d+$
