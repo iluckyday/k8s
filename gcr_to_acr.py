@@ -96,3 +96,5 @@ for line in fdata.splitlines():
         if ptags:
             for t in ptags:
                 push_image(aurl,ans,arepo,nurl,nns,nrepo,t)
+
+print(run('docker image ls'))
