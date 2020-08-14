@@ -70,7 +70,7 @@ def push_image(aurl,ans,arepo,nurl,nns,nrepo,tag):
     cmd = 'docker pull ' + nurl + '/' + nns + '/' + nrepo + ':' + tag
     cmd += '\ndocker tag ' + nurl + '/' + nns + '/' + nrepo + ':' + tag + ' ' + aurl + '/' + ans + '/' + arepo + ':' + tag
     cmd += '\ndocker push ' + aurl + '/' + ans + '/' + arepo + ':' + tag
-    print(run(cmd))
+    run(cmd)
 
 def get_push_tags(atags,ntags):
     return [item for item in ntags if item not in atags]
@@ -90,6 +90,8 @@ for line in fdata.splitlines():
     aurl = line.split(':')[1].split('/')[0]
     if aurl not in all_urls:
         all_urls.append(aurl)
+
+print(all_urls)
 
 for u in all_urls:
     acr_login(u)
