@@ -19,7 +19,9 @@ jobs:
           python-version: '3.x'
 
       - name: Install dependencies
-        run: sudo python3 -m pip install --upgrade pip setuptools wheel aliyun-python-sdk-core aliyun-python-sdk-cr
+        run: |
+          sudo python3 -m pip install --upgrade pip setuptools wheel
+          sudo python3 -m pip install --upgrade aliyun-python-sdk-core aliyun-python-sdk-cr
 
       - name: running
         run: sudo python3 gcr_to_acr.py
