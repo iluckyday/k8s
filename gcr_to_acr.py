@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+print('1')
 
 import json
 import os
@@ -75,27 +76,32 @@ def push_image(aurl,ans,arepo,nurl,nns,nrepo,tag):
 def get_push_tags(atags,ntags):
     return [item for item in ntags if item not in atags]
 
+print('2')
 fo = open('gcr_to_acr.list', 'r')
 fdata = fo.read()
 fo.close()
 
+print('3')
 envs = os.environ
+print('4')
 
 apiClient = AcsClient(envs['ACR_KEYID'], envs['ACR_SECRET'])
 req = GetRepoTagsRequest.GetRepoTagsRequest()
 req.set_protocol_type('https')
 
+print('5')
 all_urls = []
 for line in fdata.splitlines():
     aurl = line.split(':')[1].split('/')[0]
     if aurl not in all_urls:
         all_urls.append(aurl)
 
-print(all_urls)
+print('6')
 
 for u in all_urls:
     acr_login(u)
 
+print('7')
 for line in fdata.splitlines():
     nurl = line.split(':')[0].split('/')[0]
     aurl = line.split(':')[1].split('/')[0]
@@ -112,5 +118,7 @@ for line in fdata.splitlines():
     for t in ptags:
         push_image(aurl,ans,arepo,nurl,nns,nrepo,t)
 
+print('8')
 for u in all_urls:
     acr_logout(u)
+print('9')

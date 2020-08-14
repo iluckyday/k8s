@@ -8,7 +8,7 @@ on:
     - master
 
 jobs:
-  build:
+  push:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -21,7 +21,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo python3 -m pip install --upgrade pip setuptools wheel
-          python3 -m pip install --upgrade aliyun-python-sdk-core aliyun-python-sdk-cr
+          python3 -m pip install aliyun-python-sdk-core aliyun-python-sdk-cr
 
       - name: running
         run: python3 gcr_to_acr.py
