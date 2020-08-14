@@ -59,7 +59,7 @@ def get_nonacr_tags(nurl,ns,repo,tagexp):
     return [lv[0].vstring]
 
 def acr_login(url):
-    cmd = 'docker login -u ' + envs['ACR_DOCKER_USERNAME'] + ' -p ' + envs['ACR_DOCKER_PASSWORD'] + url
+    cmd = 'docker login -u ' + envs['ACR_DOCKER_USERNAME'] + ' -p ' + envs['ACR_DOCKER_PASSWORD'] + ' ' + url
     run(cmd)
 
 def acr_logout(url):
@@ -91,11 +91,9 @@ for line in fdata.splitlines():
         aurl = line.split(':')[1].split('/')[0]
         if aurl not in all_urls:
             all_urls.append(aurl)
-
+print(all_urls)
 for u in all_urls:
-    if u:
-        print(u)
-        acr_login(u)
+    acr_login(u)
 
 for line in fdata.splitlines():
     if line:
