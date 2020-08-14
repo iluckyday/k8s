@@ -73,6 +73,9 @@ fo.close()
 
 envs = os.environ
 
+run('whoami')
+run('echo ${ACR_DOCKER_USERNAME}')
+
 dlogin = 'docker login -u ' + envs['ACR_DOCKER_USERNAME'] + ' -p ' + envs['ACR_DOCKER_PASSWORD']
 run(dlogin)
 
