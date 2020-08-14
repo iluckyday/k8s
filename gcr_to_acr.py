@@ -61,8 +61,9 @@ def get_nonacr_tags(nurl,ns,repo,tagexp):
 def push_image(aurl,ans,arepo,nurl,nns,nrepo,tag):
     cmd = 'docker pull ' + nurl + '/' + nns + '/' + nrepo + ':' + tag
     cmd += '\ndocker tag ' + nurl + '/' + nns + '/' + nrepo + ':' + tag + ' ' + aurl + '/' + ans + '/' + arepo + ':' + tag
-    cmd += 'docker login -u ' + envs['ACR_DOCKER_USERNAME'] + ' -p ' + envs['ACR_DOCKER_PASSWORD'] + aurl
+    cmd += '\ndocker login -u ' + envs['ACR_DOCKER_USERNAME'] + ' -p ' + envs['ACR_DOCKER_PASSWORD'] + aurl
     cmd += '\ndocker push ' + aurl + '/' + ans + '/' + arepo + ':' + tag
+    cmd += '\ndocker logout ' + aurl
     run(cmd)
 
 def get_push_tags(atags,ntags):
