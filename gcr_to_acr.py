@@ -93,7 +93,9 @@ for line in fdata.splitlines():
             all_urls.append(aurl)
 
 for u in all_urls:
-    acr_login(u)
+    if u:
+        print(u)
+        acr_login(u)
 
 for line in fdata.splitlines():
     if line:
