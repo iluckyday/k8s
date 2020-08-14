@@ -58,13 +58,19 @@ def get_nonacr_tags(nurl,ns,repo,tagexp):
 
     return [lv[0].vstring]
 
+def acr_login(url):
+    cmd = 'docker login -u ' + envs['ACR_DOCKER_USERNAME'] + ' -p ' + envs['ACR_DOCKER_PASSWORD'] + url
+    run(cmd)
+
+def acr_logout(url):
+    cmd = 'docker logout ' + url
+    run(cmd)
+
 def push_image(aurl,ans,arepo,nurl,nns,nrepo,tag):
     cmd = 'docker pull ' + nurl + '/' + nns + '/' + nrepo + ':' + tag
     cmd += '\ndocker tag ' + nurl + '/' + nns + '/' + nrepo + ':' + tag + ' ' + aurl + '/' + ans + '/' + arepo + ':' + tag
-    cmd += '\ndocker login -u ' + envs['ACR_DOCKER_USERNAME'] + ' -p ' + envs['ACR_DOCKER_PASSWORD'] + aurl
     cmd += '\ndocker push ' + aurl + '/' + ans + '/' + arepo + ':' + tag
-    cmd += '\ndocker logout ' + aurl
-    run(cmd)
+    print(run(cmd))
 
 def get_push_tags(atags,ntags):
     return [item for item in ntags if item not in atags]
@@ -78,6 +84,16 @@ envs = os.environ
 apiClient = AcsClient(envs['ACR_KEYID'], envs['ACR_SECRET'])
 req = GetRepoTagsRequest.GetRepoTagsRequest()
 req.set_protocol_type('https')
+
+all_urls = []
+for line in fdata.splitlines():
+    if line:
+        aurl = line.split(':')[1].split('/')[0]
+        if aurl not in all_urls:
+            all_urls.append(aurl)
+
+for u in all_urls:
+    acr_login(u)
 
 for line in fdata.splitlines():
     if line:
@@ -98,3 +114,6 @@ for line in fdata.splitlines():
                 push_image(aurl,ans,arepo,nurl,nns,nrepo,t)
 
 print(run('docker image ls'))
+
+for u in all_urls:
+    acr_logout(u)
