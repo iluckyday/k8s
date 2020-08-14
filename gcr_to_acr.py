@@ -61,6 +61,7 @@ def get_nonacr_tags(nurl,ns,repo,tagexp):
 def push_image(aurl,ans,arepo,nurl,nns,nrepo,tag):
     cmd = 'docker pull ' + nurl + '/' + nns + '/' + nrepo + ':' + tag
     cmd += '\ndocker tag ' + nurl + '/' + nns + '/' + nrepo + ':' + tag + ' ' + aurl + '/' + ans + '/' + arepo + ':' + tag
+    cmd += 'docker login -u ' + envs['ACR_DOCKER_USERNAME'] + ' -p ' + envs['ACR_DOCKER_PASSWORD'] + aurl
     cmd += '\ndocker push ' + aurl + '/' + ans + '/' + arepo + ':' + tag
     run(cmd)
 
@@ -72,12 +73,6 @@ fdata = fo.read()
 fo.close()
 
 envs = os.environ
-
-run('whoami')
-run('echo ${ACR_DOCKER_USERNAME}')
-
-dlogin = 'docker login -u ' + envs['ACR_DOCKER_USERNAME'] + ' -p ' + envs['ACR_DOCKER_PASSWORD']
-run(dlogin)
 
 apiClient = AcsClient(envs['ACR_KEYID'], envs['ACR_SECRET'])
 req = GetRepoTagsRequest.GetRepoTagsRequest()
