@@ -87,33 +87,28 @@ req.set_protocol_type('https')
 
 all_urls = []
 for line in fdata.splitlines():
-    if line:
-        aurl = line.split(':')[1].split('/')[0]
-        if aurl not in all_urls:
-            all_urls.append(aurl)
-print(all_urls)
+    aurl = line.split(':')[1].split('/')[0]
+    if aurl not in all_urls:
+        all_urls.append(aurl)
+
 for u in all_urls:
     acr_login(u)
 
 for line in fdata.splitlines():
-    if line:
-        nurl = line.split(':')[0].split('/')[0]
-        aurl = line.split(':')[1].split('/')[0]
-        nns = line.split(':')[0].split('/')[1]
-        ans = line.split(':')[1].split('/')[1]
-        nrepo = line.split(':')[0].split('/')[2]
-        arepo = line.split(':')[1].split('/')[2]
-        acr_region = aurl.split('.')[1]
-        tagexp = line.split(':')[2]
-        apiClient.set_region_id(acr_region)
-        ntags = get_nonacr_tags(nurl, nns, nrepo, tagexp)
-        atags = get_acr_tags(ans, arepo)
-        ptags = get_push_tags(atags, ntags)
-        if ptags:
-            for t in ptags:
-                push_image(aurl,ans,arepo,nurl,nns,nrepo,t)
-
-print(run('docker image ls'))
+    nurl = line.split(':')[0].split('/')[0]
+    aurl = line.split(':')[1].split('/')[0]
+    nns = line.split(':')[0].split('/')[1]
+    ans = line.split(':')[1].split('/')[1]
+    nrepo = line.split(':')[0].split('/')[2]
+    arepo = line.split(':')[1].split('/')[2]
+    acr_region = aurl.split('.')[1]
+    tagexp = line.split(':')[2]
+    apiClient.set_region_id(acr_region)
+    ntags = get_nonacr_tags(nurl, nns, nrepo, tagexp)
+    atags = get_acr_tags(ans, arepo)
+    ptags = get_push_tags(atags, ntags)
+    for t in ptags:
+        push_image(aurl,ans,arepo,nurl,nns,nrepo,t)
 
 for u in all_urls:
     acr_logout(u)
