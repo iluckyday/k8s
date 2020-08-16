@@ -46,7 +46,7 @@ def get_acr_tags(ns,repo):
 
     print(data)
     for i in data['data']['tags']:
-        acr_tags.append(i)
+        acr_tags.append(i['tag'])
 
     return acr_tags
 
