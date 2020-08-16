@@ -1,0 +1,14 @@
+# docker.io
+busybox:registry.cn-chengdu.aliyuncs.com/imirror:^\d+.\d+.\d+$|latest
+
+# k8s
+k8s.gcr.io/kube-apiserver:registry.cn-chengdu.aliyuncs.com/imirror:^v\d+.\d+.\d+$
+k8s.gcr.io/kube-controller-manager:registry.cn-chengdu.aliyuncs.com/imirror:^v\d+.\d+.\d+$
+k8s.gcr.io/kube-scheduler:registry.cn-chengdu.aliyuncs.com/imirror:^v\d+.\d+.\d+$
+k8s.gcr.io/kube-proxy:registry.cn-chengdu.aliyuncs.com/imirror:^v\d+.\d+.\d+$
+k8s.gcr.io/pause:registry.cn-chengdu.aliyuncs.com/imirror:^\d+.\d+$
+k8s.gcr.io/etcd:registry.cn-chengdu.aliyuncs.com/imirror:^\d+.\d+.\d+$
+k8s.gcr.io/coredns:registry.cn-chengdu.aliyuncs.com/imirror:^\d+.\d+.\d+$
+
+# flannel
+quay.io/coreos/flannel:registry.cn-chengdu.aliyuncs.com/imirror:^v\d+.\d+.\d+-amd64$
