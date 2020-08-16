@@ -12,8 +12,6 @@ import sys
 
 import docker
 
-from aliyunsdkcore.acs_exception.exceptions import ClientException
-from aliyunsdkcore.acs_exception.exceptions import ServerException
 from aliyunsdkcore.client import AcsClient
 from aliyunsdkcr.request.v20160607 import GetRepoTagsRequest
 
@@ -36,17 +34,15 @@ def run(cmd):
     return subprocess.check_output(cmd, shell=True)
 
 def get_acr_tags(ns,repo):
+    acr_tags = []
     req.set_RepoNamespace(ns)
     req.set_RepoName(repo)
     try:
         res = apiClient.do_action_with_exception(req).decode()
-    except ServerException as e:
-        raise Exception(e)
-    except ClientException as e:
-        raise Exception(e)
+    except:
+        return acr_tags
 
     data = json.loads(res)
-    acr_tags = []
 
     for i in data['data']['tags']:
         acr_tags.append(i)
