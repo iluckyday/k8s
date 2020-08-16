@@ -139,6 +139,6 @@ for line in lines:
         apiClient.set_region_id(acr_region)
         acr_tags = get_acr_tags(acr_repos[1], acr_repos[2])
         sync_tags = get_push_tags(acr_tags, remote_tags)
-        sync_repo(client, remote_repos, acr_repos, sync_tags)
+        sync_repo(client, '/'.join(remote_repos), '/'.join(acr_repos), sync_tags)
     except Exception:
         traceback.print_exc()
