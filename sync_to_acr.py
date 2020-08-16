@@ -44,6 +44,7 @@ def get_acr_tags(ns,repo):
 
     data = json.loads(res)
 
+    print(data)
     for i in data['data']['tags']:
         acr_tags.append(i)
 
