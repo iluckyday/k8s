@@ -107,7 +107,7 @@ def sync_repo(client, rrepos, lrepos, tags):
             traceback.print_exc()
 
 filename = 'sync_to_acr.list'
-sync_nums = 3
+sync_nums = 10
 
 envs = os.environ
 
