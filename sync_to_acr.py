@@ -44,14 +44,13 @@ def get_acr_tags(ns,repo):
 
     data = json.loads(res)
 
-    print(data)
     for i in data['data']['tags']:
         acr_tags.append(i['tag'])
 
     return acr_tags
 
 def get_push_tags(atags,ntags):
-    return [item for item in ntags if item not in atags]
+    return [item for item in ntags if item not in atags or item == 'latest']
 
 def get_expect_tags(tlist, num):
     ltemp = []
@@ -140,7 +139,6 @@ for line in lines:
         apiClient.set_region_id(acr_region)
         acr_tags = get_acr_tags(acr_repos[1], acr_repos[2])
         sync_tags = get_push_tags(acr_tags, remote_tags)
-        print(remote_tags, acr_tags, sync_tags)
-        # sync_repo(client, '/'.join(remote_repos), '/'.join(acr_repos), sync_tags)
+        sync_repo(client, '/'.join(remote_repos), '/'.join(acr_repos), sync_tags)
     except Exception:
         traceback.print_exc()
