@@ -20,4 +20,6 @@ jobs:
         env:
           ACR_DOCKER_USERNAME: ${{ secrets.ACR_DOCKER_USERNAME }}
           ACR_DOCKER_PASSWORD: ${{ secrets.ACR_DOCKER_PASSWORD }}
+          WXPUSHER_APPTOKEN: ${{ secrets.WXPUSHER_APPTOKEN }}
+          WXPUSHER_UID: ${{ secrets.WXPUSHER_UID }}
         run: bash acr.sh /dev/shm/boot2kube.iso $(date '+%Y%m%d') cn-chengdu iimage
