@@ -23,3 +23,15 @@ jobs:
           WXPUSHER_APPTOKEN: ${{ secrets.WXPUSHER_APPTOKEN }}
           WXPUSHER_UID: ${{ secrets.WXPUSHER_UID }}
         run: bash acr.sh /dev/shm/boot2kube.iso $(date '+%Y%m%d') cn-chengdu iimage
+
+      - name: send mail
+        uses: dawidd6/action-send-mail@master
+        with:
+          server_address: smtp.163.com
+          server_port: 465
+          username: ${{secrets.MAIL_163_USERNAME}}
+          password: ${{secrets.MAIL_163_PASSWORD}}
+          subject: Github Actions job result
+          body: Build job of boot2kube.iso completed successfully!
+          # body: file://README.md
+          to: moyuexue@163.com
