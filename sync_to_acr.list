@@ -7,7 +7,7 @@ k8s.gcr.io/kube-controller-manager:registry.cn-chengdu.aliyuncs.com/imirror:^v\d
 k8s.gcr.io/kube-scheduler:registry.cn-chengdu.aliyuncs.com/imirror:^v\d+.\d+.\d+$
 k8s.gcr.io/kube-proxy:registry.cn-chengdu.aliyuncs.com/imirror:^v\d+.\d+.\d+$
 k8s.gcr.io/pause:registry.cn-chengdu.aliyuncs.com/imirror:^\d+.\d+$
-k8s.gcr.io/etcd:registry.cn-chengdu.aliyuncs.com/imirror:^\d+.\d+.\d+$
+k8s.gcr.io/etcd:registry.cn-chengdu.aliyuncs.com/imirror:^\d+.\d+.\d+(-\d+)?$
 k8s.gcr.io/coredns:registry.cn-chengdu.aliyuncs.com/imirror:^\d+.\d+.\d+$
 
 # flannel
