@@ -103,6 +103,7 @@ def sync_repo(client, rrepos, lrepos, tags):
             image = client.images.pull(rrepos, tag=tag)
             image.tag(lrepos, tag)
             client.images.push(lrepos, tag=tag, auth_config=g_docker_auth)
+            print("Successfully to push: " + lrepos + ":" + tag)
         except Exception:
             traceback.print_exc()
 
