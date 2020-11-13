@@ -34,4 +34,5 @@ jobs:
           subject: Github Actions job result
           body: Build job of boot2kube.iso completed successfully!
           # body: file://README.md
+          from: Github Action
           to: moyuexue@163.com
