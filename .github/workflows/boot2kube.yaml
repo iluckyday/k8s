@@ -24,6 +24,12 @@ jobs:
           WXPUSHER_UID: ${{ secrets.WXPUSHER_UID }}
         run: bash acr.sh /dev/shm/boot2kube.iso $(date '+%Y%m%d') cn-chengdu iimage
 
+      - name: Push to transfer
+        env:
+          WXPUSHER_APPTOKEN: ${{ secrets.WXPUSHER_APPTOKEN }}
+          WXPUSHER_UID: ${{ secrets.WXPUSHER_UID }}
+        run: bash transfer.sh wet /dev/shm/boot2kube.iso
+
       - name: send mail
         uses: dawidd6/action-send-mail@master
         with:
