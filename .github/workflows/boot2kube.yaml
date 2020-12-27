@@ -16,29 +16,8 @@ jobs:
       - name: Build boot2kube.iso
         run: sudo /bin/bash boot2kube/build.sh
 
-      - name: Push to ACR
-        env:
-          ACR_DOCKER_USERNAME: ${{ secrets.ACR_DOCKER_USERNAME }}
-          ACR_DOCKER_PASSWORD: ${{ secrets.ACR_DOCKER_PASSWORD }}
-          WXPUSHER_APPTOKEN: ${{ secrets.WXPUSHER_APPTOKEN }}
-          WXPUSHER_UID: ${{ secrets.WXPUSHER_UID }}
-        run: bash acr.sh /dev/shm/boot2kube.iso $(date '+%Y%m%d') cn-chengdu iimage
-
       - name: Push to transfer
         env:
           WXPUSHER_APPTOKEN: ${{ secrets.WXPUSHER_APPTOKEN }}
           WXPUSHER_UID: ${{ secrets.WXPUSHER_UID }}
         run: bash transfer.sh wet /dev/shm/boot2kube.iso
-
-      - name: send mail
-        uses: dawidd6/action-send-mail@master
-        with:
-          server_address: smtp.163.com
-          server_port: 465
-          username: ${{secrets.MAIL_163_USERNAME}}
-          password: ${{secrets.MAIL_163_PASSWORD}}
-          subject: Github Actions job result
-          body: Build job of boot2kube.iso completed successfully!
-          # body: file://README.md
-          from: Github Action
-          to: moyuexue@163.com
