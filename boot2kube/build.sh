@@ -11,10 +11,17 @@ cd buildroot
 gnum=$(sed -n '/ROOTFS_ISO9660_CMD/=' fs/iso9660/iso9660.mk)
 sed -in ''$gnum' i $(echo "Boot2Kube $(date "+%Y%m%d")" > $(ROOTFS_ISO9660_TMP_TARGET_DIR)/version)' fs/iso9660/iso9660.mk
 
+echo 'cat fs/iso9660/iso9660.mk'
 cat fs/iso9660/iso9660.mk
 
-make -s -j"$(nproc)" allnoconfig
-make -s -j"$(nproc)"
+echo 'pwd'
+pwd
+
+echo 'ls -alh'
+ls -alh
+
+make -s allnoconfig
+make -s
 
 apt-get install -y python-matplotlib python-numpy
 make graph-build
