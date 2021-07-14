@@ -11,21 +11,21 @@ cd buildroot
 gnum=$(sed -n '/ROOTFS_ISO9660_CMD/=' fs/iso9660/iso9660.mk)
 sed -in ''$gnum' i $(echo "Boot2Kube $(date "+%Y%m%d")" > $(ROOTFS_ISO9660_TMP_TARGET_DIR)/version)' fs/iso9660/iso9660.mk
 
-echo 'cat fs/iso9660/iso9660.mk'
-cat fs/iso9660/iso9660.mk
+#echo 'cat fs/iso9660/iso9660.mk'
+#cat fs/iso9660/iso9660.mk
 
-echo 'pwd'
-pwd
+#echo 'pwd'
+#pwd
 
-echo 'ls -alh'
-ls -alh
+#echo 'ls -alh'
+#ls -alh
 
 make -s allnoconfig
 make -s
 
-apt-get install -y python-matplotlib python-numpy
-make graph-build
-cp output/graphs/build.hist-build.pdf /dev/shm/boot2kube-build.hist-build.pdf
+#apt-get install -y python-matplotlib python-numpy
+#make graph-build
+#cp output/graphs/build.hist-build.pdf /dev/shm/boot2kube-build.hist-build.pdf
 
-d=$(date "+%Y%m%d")
+#d=$(date "+%Y%m%d")
 cp output/images/rootfs.iso9660 /dev/shm/boot2kube.iso
