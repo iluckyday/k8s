@@ -5,7 +5,7 @@ apt-get update
 apt-get install -y libelf-dev
 
 git clone --depth=1 https://github.com/buildroot/buildroot
-export KCONFIG_ALLCONFIG=$HOME/work/k8s/k8s/boot2kube/build.config
+export KCONFIG_ALLCONFIG=$(pwd)/work/k8s/k8s/boot2kube/build.config
 cd buildroot
 
 gnum=$(sed -n '/ROOTFS_ISO9660_CMD/=' fs/iso9660/iso9660.mk)
