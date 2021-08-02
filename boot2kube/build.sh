@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -ex
 
 apt-get update
 apt-get install -y libelf-dev
@@ -11,8 +11,8 @@ cd buildroot
 gnum=$(sed -n '/ROOTFS_ISO9660_CMD/=' fs/iso9660/iso9660.mk)
 sed -in ''$gnum' i $(echo "Boot2Kube $(date "+%Y%m%d")" > $(ROOTFS_ISO9660_TMP_TARGET_DIR)/version)' fs/iso9660/iso9660.mk
 
-#echo 'cat fs/iso9660/iso9660.mk'
-#cat fs/iso9660/iso9660.mk
+echo 'cat fs/iso9660/iso9660.mk'
+cat fs/iso9660/iso9660.mk
 
 #echo 'pwd'
 #pwd
