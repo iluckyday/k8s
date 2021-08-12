@@ -8,11 +8,10 @@ git clone --depth=1 https://github.com/buildroot/buildroot
 export KCONFIG_ALLCONFIG=$(pwd)/boot2kube/build.config
 cd buildroot
 
-gnum=$(sed -n '/ROOTFS_ISO9660_CMD/=' fs/iso9660/iso9660.mk)
-sed -in ''$gnum' i $(echo "Boot2Kube $(date "+%Y%m%d")" > $(ROOTFS_ISO9660_TMP_TARGET_DIR)/version)' fs/iso9660/iso9660.mk
-
-echo 'cat fs/iso9660/iso9660.mk'
-cat fs/iso9660/iso9660.mk
+#gnum=$(sed -n '/ROOTFS_ISO9660_CMD/=' fs/iso9660/iso9660.mk)
+#sed -in ''$gnum' i $(echo "Boot2Kube $(date "+%Y%m%d")" > $(ROOTFS_ISO9660_TMP_TARGET_DIR)/version)' fs/iso9660/iso9660.mk
+#echo 'cat fs/iso9660/iso9660.mk'
+#cat fs/iso9660/iso9660.mk
 
 #echo 'pwd'
 #pwd
