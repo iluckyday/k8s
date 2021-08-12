@@ -9,7 +9,7 @@ ARCH="amd64"
 curl -sSkL -o /tmp/kubeadm https://storage.googleapis.com/kubernetes-release/release/${RELEASE}/bin/linux/${ARCH}/kubeadm
 chmod +x /tmp/kubeadm
 
-kubeadm config images pull
+/tmp/kubeadm config images pull
 docker image list
 
 docker save $(docker image list -q) | xz > /tmp/kubernetes-images-${RELEASE}.tar.xz
