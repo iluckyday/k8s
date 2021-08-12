@@ -17,6 +17,9 @@ docker save $(docker image list "k8s.gcr.io/*" -q) | xz > /tmp/kubernetes-images
 # xz -d -k < kubernetes-images-${RELEASE}.tar.xz | docker load
 
 curl -sSkL --remote-name-all https://dl.k8s.io/${RELEASE}/kubernetes-{server,client,node}-linux-amd64.tar.gz
+mv kubernetes-server-linux-amd64.tar.gz kubernetes-server-${RELEASE}-linux-amd64.tar.gz
+mv kubernetes-client-linux-amd64.tar.gz kubernetes-client-${RELEASE}-linux-amd64.tar.gz
+mv kubernetes-node-linux-amd64.tar.gz kubernetes-node-${RELEASE}-linux-amd64.tar.gz
 
 ver="$(curl -skL https://api.github.com/repos/Mikubill/transfer/releases/latest | grep -oP '"tag_name": "\K(.*)(?=")')"
 curl -skL https://github.com/Mikubill/transfer/releases/download/"$ver"/transfer_"${ver/v/}"_linux_amd64.tar.gz | tar -xz -C /tmp
