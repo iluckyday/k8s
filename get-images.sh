@@ -13,7 +13,7 @@ chmod +x /tmp/kubeadm
 docker image list
 
 #docker save $(docker image list "k8s.gcr.io/*" -q) | xz > /tmp/kubernetes-images-${RELEASE}-linux-amd64.tar.xz
-imagetags=$(docker image list "k8s.gcr.io/*" | awk 'NR>1 {print $1 ":" $2 }')
+imagetags=$(docker image list --filter=reference="k8s.gcr.io/*" --filter=reference="k8s.gcr.io/*/*" --filter=reference="k8s.gcr.io/*/*/*" | awk 'NR>1 {print $1 ":" $2 }')
 docker save $imagetags | xz > /tmp/kubernetes-images-${RELEASE}-linux-amd64.tar.xz
 
 # docker load -i kubernetes-images-${RELEASE}-linux-amd64.tar.xz
