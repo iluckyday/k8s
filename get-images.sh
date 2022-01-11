@@ -12,9 +12,11 @@ chmod +x /tmp/kubeadm
 /tmp/kubeadm config images pull
 docker image list
 
-docker save $(docker image list "k8s.gcr.io/*" -q) | xz > /tmp/kubernetes-images-${RELEASE}-linux-amd64.tar.xz
+#docker save $(docker image list "k8s.gcr.io/*" -q) | xz > /tmp/kubernetes-images-${RELEASE}-linux-amd64.tar.xz
+imagetags=$(docker image list "k8s.gcr.io/*" | awk 'NR>1 {print $1 ":" $2 }')
+docker save $imagetags | xz > /tmp/kubernetes-images-${RELEASE}-linux-amd64.tar.xz
 
-# xz -d -k < kubernetes-images-${RELEASE}.tar.xz | docker load
+# docker load -i kubernetes-images-${RELEASE}-linux-amd64.tar.xz
 
 curl -sSkL "https://dl.k8s.io/${RELEASE}/kubernetes-{server,client,node}-linux-amd64.tar.gz" -o "/tmp/kubernetes-#1-${RELEASE}-linux-amd64.tar.gz"
 
