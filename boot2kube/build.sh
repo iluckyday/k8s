@@ -4,9 +4,11 @@ set -ex
 apt-get update
 apt-get install -y libelf-dev
 
-git clone --depth=1 https://github.com/buildroot/buildroot
 export KCONFIG_ALLCONFIG=$(pwd)/boot2kube/build.config
-cd buildroot
+# git clone --depth=1 https://github.com/buildroot/buildroot
+RELEASE=$(curl -skL https://buildroot.org/downloads/Vagrantfile | awk  -F"'" '/RELEASE=/ {print $2}')
+curl -skL https://buildroot.org/downloads/buildroot-${RELEASE}.tar.gz | tar -xz
+cd buildroot-${RELEASE}
 
 #gnum=$(sed -n '/ROOTFS_ISO9660_CMD/=' fs/iso9660/iso9660.mk)
 #sed -in ''$gnum' i $(echo "Boot2Kube $(date "+%Y%m%d")" > $(ROOTFS_ISO9660_TMP_TARGET_DIR)/version)' fs/iso9660/iso9660.mk
