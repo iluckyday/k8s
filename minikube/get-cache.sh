@@ -4,8 +4,8 @@ set -ex
 sudo apt update
 sudo apt install -y libvirt-clients
 
-curl -kLO  https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64.tar.gz
-tar -xz  minikube-linux-amd64.tar.gz
+curl -skLO  https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64.tar.gz
+tar -xf  minikube-linux-amd64.tar.gz
 MINIKUBE_VERSION=$(~/out/minikube-linux-amd64 version | awk '/version/ {print $3}')
 
 ~/out/minikube-linux-amd64 start --download-only --driver=kvm2
