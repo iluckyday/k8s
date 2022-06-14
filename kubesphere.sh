@@ -135,14 +135,23 @@ KVERSION=$(awk '/version/ {print $2}' /tmp/config.yaml)
 
 cp /tmp/kk ${mount_dir}/root
 
+sync ${mount_dir}
+umount ${mount_dir}/dev ${mount_dir}/proc ${mount_dir}/sys
+sleep 1
+killall -r provjobd || true
+sleep 1
+umount ${mount_dir}
+sleep 1
+losetup -d $loopx
+
 sleep 2
 systemd-run -G -q qemu-system-x86_64 -name kubesphere-building -machine q35,accel=kvm:hax:hvf:whpx:tcg -cpu kvm64 -smp "$(nproc)" -m 4G -nographic -object rng-random,filename=/dev/urandom,id=rng0 -device virtio-rng-pci,rng=rng0 -boot c -drive file=/tmp/devstack.raw,if=virtio,format=raw,media=disk -netdev user,id=n0,ipv6=off,hostfwd=tcp:127.0.0.1:22222-:22 -device virtio-net,netdev=n0
 
 sleep 10
-sshpass -p root ssh -q -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 22222 -l root 127.0.0.1 /root/kk create cluster --yes --with-kubesphere --container-manager containerd --with-local-storage
+sshpass -p root ssh -v -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 22222 -l root 127.0.0.1 /root/kk create cluster --yes --with-kubesphere --container-manager containerd --with-local-storage
 
 sleep 5
-sshpass -p root ssh -q -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 22222 -l root 127.0.0.1 poweroff
+sshpass -p root ssh -v -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 22222 -l root 127.0.0.1 poweroff
 sleep 5
 
 while [ true ]; do
@@ -154,13 +163,8 @@ while [ true ]; do
   fi
 done
 
-sync ${mount_dir}
-umount ${mount_dir}/dev ${mount_dir}/proc ${mount_dir}/sys
 sleep 1
-killall -r provjobd || true
+sync
 sleep 1
-umount ${mount_dir}
-sleep 1
-losetup -d $loopx
 
 qemu-img convert -c -f raw -O qcow2 /tmp/debian.raw /tmp/kubesphere-${KVERSION}.img
