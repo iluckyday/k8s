@@ -1,11 +1,6 @@
 #!/bin/bash
 set -ex
 
-sudo ls -l /var/run/containerd/containerd.sock
-sudo systemctl status containerd
-sudo dpkg -l | grep containerd
-exit
-
 CVERSION=$(curl -skL https://api.github.com/repos/kubernetes-sigs/cri-tools/releases/latest | grep -oP '"tag_name": "\K(.*)(?=")')
 curl -skL https://github.com/kubernetes-sigs/cri-tools/releases/download/$CVERSION/crictl-${CVERSION}-linux-amd64.tar.gz | tar -xz -C /usr/local/bin
 
@@ -17,7 +12,7 @@ ARCH="amd64"
 curl -sSkL -o /tmp/kubeadm https://storage.googleapis.com/kubernetes-release/release/${RELEASE}/bin/linux/${ARCH}/kubeadm
 chmod +x /tmp/kubeadm
 
-/tmp/kubeadm config images pull
+sudo /tmp/kubeadm config images pull
 docker image list
 
 #docker save $(docker image list "k8s.gcr.io/*" -q) | xz > /tmp/kubernetes-images-${RELEASE}-linux-amd64.tar.xz
