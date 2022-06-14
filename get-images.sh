@@ -1,6 +1,9 @@
 #!/bin/bash
 set -ex
 
+CVERSION=$(curl -skL https://api.github.com/repos/kubernetes-sigs/cri-tools/releases/latest | grep -oP '"tag_name": "\K(.*)(?=")')
+curl -skL https://github.com/kubernetes-sigs/cri-tools/releases/download/$CVERSION/crictl-${VERSION}-linux-amd64.tar.gz | tar -xz -C /usr/local/bin
+
 cd /tmp
 
 RELEASE="$(curl -sSL https://dl.k8s.io/release/stable.txt)"
