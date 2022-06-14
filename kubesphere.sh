@@ -8,7 +8,7 @@ include_apps+=",containerd"
 include_apps+=",sshpass"
 exclude_apps="unattended-upgrades"
 enable_services="systemd-networkd.service systemd-resolved.service ssh.service"
-disable_services="apt-daily.timer apt-daily-upgrade.timer e2scrub_all.timer systemd-timesyncd.service e2scrub_reap.service"
+disable_services="apt-daily.timer apt-daily-upgrade.timer e2scrub_all.timer e2scrub_reap.service"
 
 export DEBIAN_FRONTEND=noninteractive
 apt-config dump | grep -we Recommends -e Suggests | sed 's/1/0/' | tee /etc/apt/apt.conf.d/99norecommends
@@ -111,12 +111,11 @@ extlinux -i /boot/syslinux
 busybox --install -s /bin
 
 sed -i -e 's/#PasswordAuthentication yes/PasswordAuthentication yes/g' -e 's/#PermitRootLogin yes/PermitRootLogin yes/g' /etc/ssh/sshd_config
-ssh-keygen -q -P "" -f /root/.ssh/id_ed25519 -C "" -t ed25519
+ssh-keygen -q -P '' -f /root/.ssh/id_ed25519 -C '' -t ed25519
 ssh-keygen -y -f /root/.ssh/id_ed25519 > /root/.ssh/authorized_keys
 
 systemctl enable $enable_services
 systemctl disable $disable_services
-apt remove -y --purge tzdata
 
 ln -rsf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
 echo kubesphere > /etc/hostname
@@ -145,7 +144,7 @@ sleep 1
 losetup -d $loopx
 
 sleep 2
-systemd-run -G -q --unit qemu-kubesphere-building.service qemu-system-x86_64 -name kubesphere-building -machine q35,accel=kvm:hax:hvf:whpx:tcg -cpu kvm64 -smp "$(nproc)" -m 4G -nographic -object rng-random,filename=/dev/urandom,id=rng0 -device virtio-rng-pci,rng=rng0 -boot c -drive file=/tmp/devstack.raw,if=virtio,format=raw,media=disk -netdev user,id=n0,ipv6=off,hostfwd=tcp:127.0.0.1:22222-:22 -device virtio-net,netdev=n0
+systemd-run -G -q --unit qemu-kubesphere-building.service qemu-system-x86_64 -name kubesphere-building -machine q35,accel=kvm:hax:hvf:whpx:tcg -cpu kvm64 -smp "$(nproc)" -m 4G -nographic -object rng-random,filename=/dev/urandom,id=rng0 -device virtio-rng-pci,rng=rng0 -boot c -drive file=/tmp/debian.raw,if=virtio,format=raw,media=disk -netdev user,id=n0,ipv6=off,hostfwd=tcp:127.0.0.1:22222-:22 -device virtio-net,netdev=n0
 
 sleep 10
 journalctl -u qemu-kubesphere-building.service
