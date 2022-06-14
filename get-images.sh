@@ -1,6 +1,11 @@
 #!/bin/bash
 set -ex
 
+sudo ls -l /var/run/containerd/containerd.sock
+sudo systemctl status containerd
+sudo dpkg -l | grep containerd
+exit
+
 CVERSION=$(curl -skL https://api.github.com/repos/kubernetes-sigs/cri-tools/releases/latest | grep -oP '"tag_name": "\K(.*)(?=")')
 curl -skL https://github.com/kubernetes-sigs/cri-tools/releases/download/$CVERSION/crictl-${CVERSION}-linux-amd64.tar.gz | tar -xz -C /usr/local/bin
 

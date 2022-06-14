@@ -109,8 +109,6 @@ dd if=/usr/lib/EXTLINUX/mbr.bin of=$loopx
 extlinux -i /boot/syslinux
 busybox --install -s /bin
 
-sed -i -e 's/#PasswordAuthentication yes/PasswordAuthentication yes/g' -e 's/#PermitRootLogin yes/PermitRootLogin yes/g' /etc/ssh/sshd_config
-
 systemctl enable $enable_services
 systemctl disable $disable_services
 
@@ -132,6 +130,11 @@ KVERSION=$(awk '/version/ {print $2}' /tmp/config.yaml)
 cp /tmp/kk ${mount_dir}/usr/local/bin
 chmod +x ${mount_dir}/usr/local/bin/kk
 
+ssh-keygen -q -P '' -f /root/.ssh/id_ed25519 -C '' -t ed25519
+ssh-keygen -y -f /root/.ssh/id_ed25519 >> ${mount_dir}/root/.ssh/authorized_keys
+cp /root/.ssh/id_ed25519 ${mount_dir}/root/.ssh/
+chmod 600 ${mount_dir}/root/.ssh/id_ed25519
+
 sync ${mount_dir}
 umount ${mount_dir}/dev ${mount_dir}/proc ${mount_dir}/sys
 sleep 1
@@ -145,11 +148,6 @@ sleep 2
 systemd-run -G -q --unit qemu-kubesphere-building.service qemu-system-x86_64 -name kubesphere-building -machine q35,accel=kvm:hax:hvf:whpx:tcg -cpu kvm64 -smp "$(nproc)" -m 4G -nographic -object rng-random,filename=/dev/urandom,id=rng0 -device virtio-rng-pci,rng=rng0 -boot c -drive file=/tmp/debian.raw,if=virtio,format=raw,media=disk -netdev user,id=n0,ipv6=off,hostfwd=tcp:127.0.0.1:22222-:22 -device virtio-net,netdev=n0
 
 sleep 10
-ssh-keygen -q -P '' -f /root/.ssh/id_ed25519 -C '' -t ed25519
-ssh-keygen -y -f /root/.ssh/id_ed25519 > ${mount_dir}/root/.ssh/authorized_keys
-cp /root/.ssh/id_ed25519 ${mount_dir}/root/.ssh/
-chmod 600 ${mount_dir}/root/.ssh/id_ed25519
-
 ssh -v -o ConnectionAttempts=10 -o ConnectTimeout=5 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 22222 -l root 127.0.0.1 kk create cluster --yes --with-kubesphere --container-manager containerd --with-local-storage
 
 sleep 5
