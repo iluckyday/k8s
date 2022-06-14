@@ -2,7 +2,7 @@
 set -ex
 
 release=$(curl https://www.debian.org/releases/ | grep -oP 'codenamed <em>\K(.*)(?=</em>)')
-include_apps="systemd,systemd-sysv,bash-completion,openssh-server,ca-certificates"
+include_apps="systemd,systemd-sysv,dbus,bash-completion,openssh-server,ca-certificates"
 include_apps+=",sudo,curl,openssl,socat,conntrack,ebtables,ipset,ipvsadm"
 include_apps+=",containerd"
 exclude_apps="unattended-upgrades"

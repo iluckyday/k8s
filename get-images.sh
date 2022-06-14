@@ -13,13 +13,16 @@ curl -sSkL -o /tmp/kubeadm https://storage.googleapis.com/kubernetes-release/rel
 chmod +x /tmp/kubeadm
 
 sudo /tmp/kubeadm config images pull
-docker image list
+sudo ctr images list
+# docker image list
 
-#docker save $(docker image list "k8s.gcr.io/*" -q) | xz > /tmp/kubernetes-images-${RELEASE}-linux-amd64.tar.xz
-imagetags=$(docker image list --filter=reference="k8s.gcr.io/*" --filter=reference="k8s.gcr.io/*/*" --filter=reference="k8s.gcr.io/*/*/*" | awk 'NR>1 {print $1 ":" $2 }')
-docker save $imagetags | xz > /tmp/kubernetes-images-${RELEASE}-linux-amd64.tar.xz
-
+# docker save $(docker image list "k8s.gcr.io/*" -q) | xz > /tmp/kubernetes-images-${RELEASE}-linux-amd64.tar.xz
+# imagetags=$(docker image list --filter=reference="k8s.gcr.io/*" --filter=reference="k8s.gcr.io/*/*" --filter=reference="k8s.gcr.io/*/*/*" | awk 'NR>1 {print $1 ":" $2 }')
+# docker save $imagetags | xz > /tmp/kubernetes-images-${RELEASE}-linux-amd64.tar.xz
 # docker load -i kubernetes-images-${RELEASE}-linux-amd64.tar.xz
+
+images=$(sudo ctr images list | awk 'NR>1 {print $1}')
+sudo ctr images export --all-platforms - $images | xz > /tmp/kubernetes-images-${RELEASE}-linux-amd64.tar.xz
 
 curl -sSkL "https://dl.k8s.io/${RELEASE}/kubernetes-{server,client,node}-linux-amd64.tar.gz" -o "/tmp/kubernetes-#1-${RELEASE}-linux-amd64.tar.gz"
 
