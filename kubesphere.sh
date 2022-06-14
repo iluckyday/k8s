@@ -133,6 +133,7 @@ curl -skL ${DOWNLOAD_URL} | tar -xz -C /tmp
 KVERSION=$(awk '/version/ {print $2}' /tmp/config.yaml)
 
 cp /tmp/kk ${mount_dir}/root
+chmod +x ${mount_dir}/root/kk
 
 sync ${mount_dir}
 umount ${mount_dir}/dev ${mount_dir}/proc ${mount_dir}/sys
@@ -147,8 +148,6 @@ sleep 2
 systemd-run -G -q --unit qemu-kubesphere-building.service qemu-system-x86_64 -name kubesphere-building -machine q35,accel=kvm:hax:hvf:whpx:tcg -cpu kvm64 -smp "$(nproc)" -m 4G -nographic -object rng-random,filename=/dev/urandom,id=rng0 -device virtio-rng-pci,rng=rng0 -boot c -drive file=/tmp/debian.raw,if=virtio,format=raw,media=disk -netdev user,id=n0,ipv6=off,hostfwd=tcp:127.0.0.1:22222-:22 -device virtio-net,netdev=n0
 
 sleep 10
-journalctl -u qemu-kubesphere-building.service
-
 sshpass -p root ssh -v -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 22222 -l root 127.0.0.1 /root/kk create cluster --yes --with-kubesphere --container-manager containerd --with-local-storage
 
 sleep 5
