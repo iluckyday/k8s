@@ -5,7 +5,6 @@ release=$(curl https://www.debian.org/releases/ | grep -oP 'codenamed <em>\K(.*)
 include_apps="systemd,systemd-sysv,bash-completion,openssh-server,ca-certificates"
 include_apps+=",sudo,curl,openssl,socat,conntrack,ebtables,ipset,ipvsadm"
 include_apps+=",containerd"
-include_apps+=",sshpass"
 exclude_apps="unattended-upgrades"
 enable_services="systemd-networkd.service systemd-resolved.service ssh.service"
 disable_services="apt-daily.timer apt-daily-upgrade.timer e2scrub_all.timer e2scrub_reap.service"
@@ -111,8 +110,6 @@ extlinux -i /boot/syslinux
 busybox --install -s /bin
 
 sed -i -e 's/#PasswordAuthentication yes/PasswordAuthentication yes/g' -e 's/#PermitRootLogin yes/PermitRootLogin yes/g' /etc/ssh/sshd_config
-ssh-keygen -q -P '' -f /root/.ssh/id_ed25519 -C '' -t ed25519
-ssh-keygen -y -f /root/.ssh/id_ed25519 > /root/.ssh/authorized_keys
 
 systemctl enable $enable_services
 systemctl disable $disable_services
@@ -132,8 +129,8 @@ curl -skL ${DOWNLOAD_URL} | tar -xz -C /tmp
 /tmp/kk create config -y -f /tmp/config.yaml
 KVERSION=$(awk '/version/ {print $2}' /tmp/config.yaml)
 
-cp /tmp/kk ${mount_dir}/root
-chmod +x ${mount_dir}/root/kk
+cp /tmp/kk ${mount_dir}/usr/local/bin
+chmod +x ${mount_dir}/usr/local/bin/kk
 
 sync ${mount_dir}
 umount ${mount_dir}/dev ${mount_dir}/proc ${mount_dir}/sys
@@ -148,10 +145,15 @@ sleep 2
 systemd-run -G -q --unit qemu-kubesphere-building.service qemu-system-x86_64 -name kubesphere-building -machine q35,accel=kvm:hax:hvf:whpx:tcg -cpu kvm64 -smp "$(nproc)" -m 4G -nographic -object rng-random,filename=/dev/urandom,id=rng0 -device virtio-rng-pci,rng=rng0 -boot c -drive file=/tmp/debian.raw,if=virtio,format=raw,media=disk -netdev user,id=n0,ipv6=off,hostfwd=tcp:127.0.0.1:22222-:22 -device virtio-net,netdev=n0
 
 sleep 10
-sshpass -p root ssh -v -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 22222 -l root 127.0.0.1 /root/kk create cluster --yes --with-kubesphere --container-manager containerd --with-local-storage
+ssh-keygen -q -P '' -f /root/.ssh/id_ed25519 -C '' -t ed25519
+ssh-keygen -y -f /root/.ssh/id_ed25519 > ${mount_dir}/root/.ssh/authorized_keys
+cp /root/.ssh/id_ed25519 ${mount_dir}/root/.ssh/
+chmod 600 ${mount_dir}/root/.ssh/id_ed25519
+
+ssh -v -o ConnectionAttempts=10 -o ConnectTimeout=5 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 22222 -l root 127.0.0.1 kk create cluster --yes --with-kubesphere --container-manager containerd --with-local-storage
 
 sleep 5
-sshpass -p root ssh -v -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 22222 -l root 127.0.0.1 poweroff
+ssh -q -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 22222 -l root 127.0.0.1 poweroff
 sleep 5
 
 while [ true ]; do
