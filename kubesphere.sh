@@ -155,7 +155,7 @@ systemd-run -G -q --unit qemu-kubesphere-building.service qemu-system-x86_64 -na
 
 sleep 10
 # ssh -q -o ConnectionAttempts=10 -o ConnectTimeout=60 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 22222 -l root 127.0.0.1 kk create cluster --yes --with-kubesphere --container-manager containerd --with-local-storage || true
-/tmp/kk create cluster --yes --with-kubesphere --with-local-storage -filename /home/runner/work/k8s/k8s/kubesphere-config.yaml
+/tmp/kk create cluster --yes --with-kubesphere --with-local-storage --filename /home/runner/work/k8s/k8s/kubesphere-config.yaml
 
 sleep 5
 ssh -q -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 22222 -l root 127.0.0.1 poweroff
