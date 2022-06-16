@@ -153,7 +153,7 @@ systemd-run -G -q --unit qemu-kubesphere-building.service qemu-system-x86_64 -na
 
 sleep 10
 ssh -q -o ConnectionAttempts=10 -o ConnectTimeout=60 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 22222 -l root 127.0.0.1 cat /etc/containerd/config.toml
-ssh -q -o ConnectionAttempts=10 -o ConnectTimeout=60 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 22222 -l root 127.0.0.1 cat containerd config dump
+ssh -q -o ConnectionAttempts=10 -o ConnectTimeout=60 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 22222 -l root 127.0.0.1 containerd config dump
 
 # sleep 10
 # ssh -q -o ConnectionAttempts=10 -o ConnectTimeout=60 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 22222 -l root 127.0.0.1 kk create cluster --yes --with-kubesphere --container-manager containerd --with-local-storage
