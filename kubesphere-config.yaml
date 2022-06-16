@@ -4,7 +4,7 @@ metadata:
   name: cluster1
 spec:
   hosts:
-  - {name: node1, address: 127.0.0.1, internalAddress: 10.0.2.15, port: 22222, user: root, privateKeyPath: "~/.ssh/id_ed25519"}
+  - {name: node1, address: 127.0.0.1, internalAddress: 127.0.0.1, port: 22222, user: root, privateKeyPath: "~/.ssh/id_ed25519"}
   roleGroups:
     etcd:
     - node1
