@@ -4,8 +4,8 @@ set -ex
 # release=$(curl https://www.debian.org/releases/ | grep -oP 'codenamed <em>\K(.*)(?=</em>)')
 release="sid"
 include_apps="systemd,systemd-sysv,dbus,bash-completion,openssh-server,ca-certificates"
-include_apps+=",sudo,curl,openssl,socat,conntrack,ebtables,ipset,ipvsadm"
-include_apps+=",containerd"
+include_apps+=",sudo,curl,openssl,socat,conntrack,ebtables,ipset,ipvsadm,iptables,ethtool,iproute2"
+# include_apps+=",containerd"
 exclude_apps="unattended-upgrades"
 enable_services="systemd-networkd.service systemd-resolved.service ssh.service"
 disable_services="apt-daily.timer apt-daily-upgrade.timer e2scrub_all.timer e2scrub_reap.service"
