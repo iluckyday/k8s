@@ -1,7 +1,8 @@
 #!/bin/sh
 set -ex
 
-release=$(curl https://www.debian.org/releases/ | grep -oP 'codenamed <em>\K(.*)(?=</em>)')
+# release=$(curl https://www.debian.org/releases/ | grep -oP 'codenamed <em>\K(.*)(?=</em>)')
+release="sid"
 include_apps="systemd,systemd-sysv,dbus,bash-completion,openssh-server,ca-certificates"
 include_apps+=",sudo,curl,openssl,socat,conntrack,ebtables,ipset,ipvsadm"
 include_apps+=",containerd"
@@ -155,8 +156,8 @@ sleep 10
 ssh -q -o ConnectionAttempts=10 -o ConnectTimeout=60 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 22222 -l root 127.0.0.1 cat /etc/containerd/config.toml
 ssh -q -o ConnectionAttempts=10 -o ConnectTimeout=60 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 22222 -l root 127.0.0.1 containerd config dump
 
-# sleep 10
-# ssh -q -o ConnectionAttempts=10 -o ConnectTimeout=60 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 22222 -l root 127.0.0.1 kk create cluster --yes --with-kubesphere --container-manager containerd --with-local-storage
+sleep 10
+ssh -q -o ConnectionAttempts=10 -o ConnectTimeout=60 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 22222 -l root 127.0.0.1 kk create cluster --yes --with-kubesphere --container-manager containerd --with-local-storage
 
 sleep 5
 ssh -q -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 22222 -l root 127.0.0.1 poweroff
