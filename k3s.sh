@@ -62,7 +62,6 @@ echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDyuzRtZAyeU3VGDKsGk52rd7b/rJ/EnT8Ce2h
 chmod 600 ${mount_dir}/root/.ssh/authorized_keys
 
 chroot ${mount_dir} /bin/sh -c "
-apk add -U --no-cache syslinux linux-virt
 dd bs=440 count=1 if=/usr/share/syslinux/mbr.bin of=$dev
 extlinux -i /boot
 rm -f /boot/System.map* /etc/hostname
@@ -72,6 +71,7 @@ rc-update add hwdrivers sysinit
 rc-update add modules boot
 rc-update add sysctl boot
 rc-update add bootmisc boot
+rc-update add cgroups boot
 rc-update add networking boot
 rc-update add urandom boot
 rc-update add sshd boot
