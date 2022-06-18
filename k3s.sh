@@ -16,7 +16,7 @@ mount $dev ${mount_dir}
 apkg=$(wget -qO- http://dl-cdn.alpinelinux.org/alpine/edge/main/x86_64 | awk -F'"' '/apk-tools-static/ {print$2}')
 wget -qO- http://dl-cdn.alpinelinux.org/alpine/edge/main/x86_64/$apkg | tar -xz -C /tmp
 
-/tmp/sbin/apk.static -q -X http://dl-cdn.alpinelinux.org/alpine/edge/main -X http://dl-cdn.alpinelinux.org/alpine/edge/community -X http://dl-cdn.alpinelinux.org/alpine/edge/testing -U --no-cache --allow-untrusted --root ${mount_dir} --initdb add alpine-base openssh qemu-guest-agent ${pkgs}
+/tmp/sbin/apk.static -q -X http://dl-cdn.alpinelinux.org/alpine/edge/main -X http://dl-cdn.alpinelinux.org/alpine/edge/community -X http://dl-cdn.alpinelinux.org/alpine/edge/testing -U --no-cache --allow-untrusted --root ${mount_dir} --initdb add alpine-base syslinux linux-virt openssh qemu-guest-agent ${pkgs}
 
 sleep 2
 
@@ -65,13 +65,12 @@ chroot ${mount_dir} /bin/sh -c "
 apk add -U --no-cache syslinux linux-virt
 dd bs=440 count=1 if=/usr/share/syslinux/mbr.bin of=$dev
 extlinux -i /boot
-rm -f /boot/System.map*
+rm -f /boot/System.map* /etc/hostname
 rc-update add devfs sysinit
 rc-update add mdev sysinit
 rc-update add hwdrivers sysinit
 rc-update add modules boot
 rc-update add sysctl boot
-rc-update add hostname boot
 rc-update add bootmisc boot
 rc-update add networking boot
 rc-update add urandom boot
