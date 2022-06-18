@@ -159,7 +159,7 @@ ssh -q -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 22222 -l r
 
 sleep 5
 ssh -q -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 22222 -l root 127.0.0.1 poweroff
-sleep 5
+sleep 60
 
 while [ true ]; do
   pid=`pgrep kubesphere-building || true`
@@ -175,3 +175,4 @@ sync
 sleep 1
 
 qemu-img convert -c -f raw -O qcow2 /tmp/debian.raw /tmp/kubesphere-${KVERSION}.img
+ls -lh /tmp/kubesphere-${KVERSION}.img
