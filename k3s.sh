@@ -5,7 +5,7 @@ pkgs="iptables socat ethtool openssl conntrack-tools ipset ipvsadm"
 apt update
 apt install -y qemu-utils
 
-qemu-img create -f raw /tmp/alpine.raw 200G
+qemu-img create -f raw /tmp/alpine.raw 2G
 dev=$(losetup --show -f /tmp/alpine.raw)
 mkfs.ext4 -F -L alpine-root -b 1024 -I 128 -O "^has_journal" $dev
 
@@ -61,24 +61,6 @@ mkdir -p ${mount_dir}/root/.ssh
 echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDyuzRtZAyeU3VGDKsGk52rd7b/rJ/EnT8Ce2hwWOZWp" >> ${mount_dir}/root/.ssh/authorized_keys
 chmod 600 ${mount_dir}/root/.ssh/authorized_keys
 
-chroot ${mount_dir} /bin/sh -c "
-dd bs=440 count=1 if=/usr/share/syslinux/mbr.bin of=$dev
-extlinux -i /boot
-rm -f /boot/System.map* /etc/hostname
-rc-update add devfs sysinit
-rc-update add mdev sysinit
-rc-update add hwdrivers sysinit
-rc-update add modules boot
-rc-update add sysctl boot
-rc-update add bootmisc boot
-rc-update add cgroups boot
-rc-update add networking boot
-rc-update add urandom boot
-rc-update add sshd boot
-rc-update add qemu-guest-agent boot
-rc-update add mount-ro shutdown
-rc-update add killprocs shutdown
-"
 cat << EOF > ${mount_dir}/boot/extlinux.conf
 PROMPT 0
 TIMEOUT 0
@@ -98,6 +80,31 @@ chmod 755 ${mount_dir}/usr/bin/k3s
 for cmd in kubectl crictl ctr; do
 	ln -sf /usr/bin/k3s ${mount_dir}/usr/bin/${cmd}
 done
+
+chroot ${mount_dir} /bin/sh -c "
+dd bs=440 count=1 if=/usr/share/syslinux/mbr.bin of=$dev
+extlinux -i /boot
+rm -f /boot/System.map* /etc/hostname
+rc-update add devfs sysinit
+rc-update add mdev sysinit
+rc-update add hwdrivers sysinit
+rc-update add modules boot
+rc-update add sysctl boot
+rc-update add bootmisc boot
+rc-update add cgroups boot
+rc-update add networking boot
+rc-update add urandom boot
+rc-update add sshd boot
+rc-update add qemu-guest-agent boot
+rc-update add mount-ro shutdown
+rc-update add killprocs shutdown
+dd if=/dev/zero of=/tmp/bigfile
+sync
+sync
+rm /tmp/bigfile
+sync
+sync
+"
 
 sleep 1
 sync ${mount_dir}
