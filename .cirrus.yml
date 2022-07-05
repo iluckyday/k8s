@@ -6,6 +6,7 @@ task:
     platform: linux
     cpu: 8
     memory: 32G
+    disk: 100
     timeout_in: 120m
     nested_virtualization: true
   environment:
