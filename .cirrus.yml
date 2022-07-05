@@ -1,0 +1,16 @@
+task:
+  name: kubesphere
+  compute_engine_instance:
+    image_project: cirrus-images
+    image: family/docker-kvm
+    platform: linux
+    cpu: 8
+    memory: 32G
+    timeout_in: 120m
+    nested_virtualization: true
+  environment:
+    WXPUSHER_APPTOKEN: ENCRYPTED[!e247971cffd1106c334ed8ad3f131997dce67caf3064ebec9866f71319d514f18f59ce4bd94de73e661d3aaf1ee7b421!]
+    WXPUSHER_UID: ENCRYPTED[!63f81dc4b8ca340c98612a46ac5c5351b11ef7e059df92188d56ce76669a9287a7fcaa5e385967e1a8e70cfeeb35a77a!]
+  setup_script:
+    - bash kubesphere.sh
+    - bash transfer.sh wet /tmp/kubesphere-*.img
