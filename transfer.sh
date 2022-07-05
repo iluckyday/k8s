@@ -7,49 +7,7 @@ curl -skL https://github.com/Mikubill/transfer/releases/download/"$ver"/transfer
 END=$1
 FILE=$2
 
-case $END in
-	arp)
-		echo "arp"
-		;;
-	bit)
-		echo "bit"
-		;;
-	cat)
-		echo "cat"
-		;;
-	cow)
-		TYPE="cow"
-		;;
-	gof)
-		echo "gof"
-		;;
-	tmp)
-		echo "tmp"
-		;;
-	vim)
-		echo "vim"
-		;;
-	wss)
-		echo "wss"
-		;;
-	wet)
-		echo "wet"
-		;;
-	flk)
-		echo "flk"
-		;;
-	trs)
-		echo "trs"
-		;;
-	lzs)
-		echo "lzs"
-		;;
-	*)
-		echo "error"
-		exit
-esac
-
-t_data=$(/tmp/transfer $END --silent $FILE)
+t_data=$(/tmp/transfer $END $FILE)
 
 FILENAME=$(basename $FILE)
 SIZE="$(du -h $FILE | awk '{print $1}')"
