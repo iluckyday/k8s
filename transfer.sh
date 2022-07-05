@@ -9,6 +9,10 @@ FILE=$2
 
 t_data=$(/tmp/transfer $END $FILE)
 
+if [ "$END" == "anon" ]; then
+t_data=$(echo $t_data | awk -F'k: ' '{print $2}')
+fi
+
 FILENAME=$(basename $FILE)
 SIZE="$(du -h $FILE | awk '{print $1}')"
 data="$FILENAME-$SIZE-${t_data}"
