@@ -9,7 +9,7 @@ FILE=$2
 
 t_data=$(/tmp/transfer --silent $END $FILE)
 
-if [ "$END" == "anon" || "$END" == "gof" || "$END" == "trs" ]; then
+if [ "$END" == "anon" -o "$END" == "gof" -o "$END" == "trs" ]; then
 t_data=$(echo $t_data | awk -F'k: ' '{print $2}')
 fi
 
