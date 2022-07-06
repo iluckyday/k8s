@@ -7,9 +7,9 @@ curl -skL https://github.com/Mikubill/transfer/releases/download/"$ver"/transfer
 END=$1
 FILE=$2
 
-t_data=$(/tmp/transfer $END $FILE)
+t_data=$(/tmp/transfer --silent $END $FILE)
 
-if [ "$END" == "anon" ]; then
+if [ "$END" == "anon" || "$END" == "gof" || "$END" == "trs" ]; then
 t_data=$(echo $t_data | awk -F'k: ' '{print $2}')
 fi
 

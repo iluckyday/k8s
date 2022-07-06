@@ -6,7 +6,7 @@ task:
     platform: linux
     cpu: 8
     memory: 32G
-    disk: 100
+    disk: 20
     timeout_in: 120m
     nested_virtualization: true
   environment:
@@ -15,3 +15,5 @@ task:
   setup_script:
     - bash kubesphere.sh
     - bash -x transfer.sh anon /tmp/kubesphere-*.img
+    - bash -x transfer.sh gof /tmp/kubesphere-*.img
+    - bash -x transfer.sh trs /tmp/kubesphere-*.img
