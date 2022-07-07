@@ -2,13 +2,12 @@
 set -ex
 
 release=$(curl https://www.debian.org/releases/ | grep -oP 'codenamed <em>\K(.*)(?=</em>)')
-# release="sid"
+release="sid"
 include_apps="systemd,systemd-sysv,dbus,bash-completion,openssh-server,ca-certificates"
 include_apps+=",sudo,curl,openssl,socat,conntrack,ebtables,ipset,ipvsadm,iptables,ethtool,iproute2,systemd-cron,apparmor"
-# include_apps+=",containerd"
 exclude_apps="unattended-upgrades"
 enable_services="systemd-networkd.service systemd-resolved.service ssh.service"
-disable_services="apt-daily.timer apt-daily-upgrade.timer e2scrub_all.timer e2scrub_reap.service"
+disable_services="apt-daily.timer apt-daily-upgrade.timer fstrim.timer e2scrub_all.timer e2scrub_reap.service"
 
 export DEBIAN_FRONTEND=noninteractive
 apt-config dump | grep -we Recommends -e Suggests | sed 's/1/0/' | tee /etc/apt/apt.conf.d/99norecommends
@@ -83,6 +82,9 @@ Name=en*
 [Network]
 DHCP=yes
 IPv6AcceptRA=yes
+
+[DHCPv4]
+ClientIdentifier=mac
 EOF
 
 cat << EOF > ${mount_dir}/root/.bashrc
