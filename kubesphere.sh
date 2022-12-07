@@ -100,7 +100,7 @@ DEFAULT debian
 LABEL debian
         LINUX /vmlinuz
         INITRD /initrd.img
-        APPEND root=LABEL=debian-root quiet intel_iommu=on iommu=pt
+        APPEND root=LABEL=debian-root intel_iommu=on iommu=pt console=ttyS0
 EOF
 
 chroot ${mount_dir} /bin/bash -c "
@@ -157,6 +157,8 @@ systemd-run -G -q --unit qemu-kubesphere-building.service qemu-system-x86_64 -na
 
 sleep 60
 journalctl -u qemu-kubesphere-building.service
+
+sleep 2
 ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 22222 -l root 127.0.0.1 whoami
 ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 22222 -l root 127.0.0.1 kk create cluster --debug --yes --with-kubesphere --container-manager containerd --with-local-storage
 #ssh -q -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 22222 -l root 127.0.0.1 kk create cluster --debug --yes --with-kubesphere --container-manager containerd --with-local-storage || true
