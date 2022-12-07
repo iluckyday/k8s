@@ -3,7 +3,8 @@ set -ex
 
 release=$(curl https://www.debian.org/releases/ | grep -oP 'codenamed <em>\K(.*)(?=</em>)')
 release="sid"
-include_apps="systemd,systemd-resolved,systemd-sysv,dbus,bash-completion,openssh-server,ca-certificates"
+include_apps="linux-image-cloud-amd64,extlinux,initramfs-tools,busybox"
+include_apps+="systemd,systemd-resolved,systemd-sysv,dbus,bash-completion,openssh-server,ca-certificates"
 include_apps+=",sudo,curl,openssl,socat,conntrack,ebtables,ipset,ipvsadm,iptables,ethtool,iproute2,systemd-cron,apparmor"
 exclude_apps="unattended-upgrades"
 enable_services="systemd-networkd.service systemd-resolved.service ssh.service"
@@ -104,11 +105,7 @@ LABEL debian
 EOF
 
 chroot ${mount_dir} /bin/bash -c "
-export PATH=/bin:/sbin:/usr/bin:/usr/sbin DEBIAN_FRONTEND=noninteractive
-# echo root:root | chpasswd
 sed -i 's/root:\*:/root::/' etc/shadow
-apt update
-apt install -y -o APT::Install-Recommends=0 -o APT::Install-Suggests=0 linux-image-cloud-amd64 extlinux initramfs-tools busybox
 dd if=/usr/lib/EXTLINUX/mbr.bin of=$loopx
 extlinux -i /boot/syslinux
 busybox --install -s /bin
