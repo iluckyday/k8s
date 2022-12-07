@@ -3,7 +3,7 @@ set -ex
 
 release=$(curl https://www.debian.org/releases/ | grep -oP 'codenamed <em>\K(.*)(?=</em>)')
 release="sid"
-include_apps="systemd,systemd-sysv,dbus,bash-completion,openssh-server,ca-certificates"
+include_apps="systemd,systemd-resolved,systemd-sysv,dbus,bash-completion,openssh-server,ca-certificates"
 include_apps+=",sudo,curl,openssl,socat,conntrack,ebtables,ipset,ipvsadm,iptables,ethtool,iproute2,systemd-cron,apparmor"
 exclude_apps="unattended-upgrades"
 enable_services="systemd-networkd.service systemd-resolved.service ssh.service"
@@ -159,8 +159,8 @@ sleep 60
 journalctl -u qemu-kubesphere-building.service
 
 sleep 2
-ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 22222 -l root 127.0.0.1 whoami
 ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 22222 -l root 127.0.0.1 kk create cluster --debug --yes --with-kubesphere --container-manager containerd --with-local-storage
+
 #ssh -q -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 22222 -l root 127.0.0.1 kk create cluster --debug --yes --with-kubesphere --container-manager containerd --with-local-storage || true
 # /tmp/kk create cluster --yes --with-kubesphere --with-local-storage --filename /home/runner/work/k8s/k8s/kubesphere-config.yaml
 
