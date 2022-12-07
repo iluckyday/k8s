@@ -162,8 +162,8 @@ ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 22222 -l root
 # /tmp/kk create cluster --yes --with-kubesphere --with-local-storage --filename /home/runner/work/k8s/k8s/kubesphere-config.yaml
 
 sleep 5
-ssh -q -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 22222 -l root 127.0.0.1 poweroff
-sleep 60
+ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 22222 -l root 127.0.0.1 poweroff
+sleep 180
 
 while [ true ]; do
   pid=`pgrep kubesphere-building || true`
@@ -178,6 +178,7 @@ sleep 1
 sync
 sleep 1
 
+sleep 10
 qemu-img convert -c -f raw -O qcow2 /tmp/debian.raw /tmp/kubesphere-${KVERSION}.img
 ls -lh /tmp/kubesphere-${KVERSION}.img
 split --verbose -d -b 1500M /tmp/kubesphere-${KVERSION}.img /tmp/kubesphere-${KVERSION}.img.
