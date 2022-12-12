@@ -16,3 +16,4 @@ task:
     - bash kubesphere.sh
     - bash -x transfer.sh wet /tmp/kubesphere-*.img.00
     - bash -x transfer.sh wet /tmp/kubesphere-*.img.01
+    - bash -x transfer.sh wet /tmp/kubesphere-*.img.k8s
