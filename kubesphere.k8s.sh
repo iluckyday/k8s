@@ -6,6 +6,7 @@ release="sid"
 include_apps="linux-image-cloud-amd64,extlinux,initramfs-tools,busybox"
 include_apps+=",systemd,systemd-resolved,systemd-sysv,dbus,bash-completion,openssh-server,ca-certificates"
 include_apps+=",sudo,curl,openssl,socat,conntrack,ebtables,ipset,ipvsadm,iptables,ethtool,iproute2,systemd-cron,apparmor"
+include_apps+=",chrony,containerd"
 exclude_apps="unattended-upgrades"
 enable_services="systemd-networkd.service systemd-resolved.service ssh.service"
 disable_services="apt-daily.timer apt-daily-upgrade.timer fstrim.timer e2scrub_all.timer e2scrub_reap.service"
@@ -17,7 +18,7 @@ apt install -y qemu-system-x86 debootstrap qemu-utils
 
 mount_dir=/tmp/debian
 
-qemu-img create -f raw /tmp/debian.raw 100G
+qemu-img create -f raw /tmp/debian.raw 5G
 loopx=$(losetup --show -f -P /tmp/debian.raw)
 
 mkfs.ext4 -F -L debian-root -b 1024 -I 128 -O "^has_journal" $loopx
@@ -152,18 +153,16 @@ losetup -d $loopx
 sleep 2
 systemd-run -G -q --unit qemu-kubesphere-building.service qemu-system-x86_64 -name kubesphere-building -machine q35,accel=kvm:hax:hvf:whpx:tcg -cpu kvm64 -smp "$(nproc)" -m 24G -nographic -object rng-random,filename=/dev/urandom,id=rng0 -device virtio-rng-pci,rng=rng0 -boot c -drive file=/tmp/debian.raw,if=virtio,format=raw,media=disk -netdev user,id=n0,ipv6=off,net=10.20.20.0/24,host=10.20.20.100,dhcpstart=10.20.20.10,dns=10.20.20.101,hostfwd=tcp:127.0.0.1:22222-:22 -device virtio-net,netdev=n0
 
+sleep 30
+ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 22222 -l root 127.0.0.1 kk create cluster --debug --yes --container-manager containerd --with-local-storage
+
 sleep 60
-journalctl -u qemu-kubesphere-building.service
+ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 22222 -l root 127.0.0.1 rm -rf /root/kubekey
+ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 22222 -l root 127.0.0.1 fstrim -a -v
 
-sleep 2
-ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 22222 -l root 127.0.0.1 kk create cluster --debug --yes --with-kubesphere --container-manager containerd --with-local-storage
-
-#ssh -q -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 22222 -l root 127.0.0.1 kk create cluster --debug --yes --with-kubesphere --container-manager containerd --with-local-storage || true
-# /tmp/kk create cluster --yes --with-kubesphere --with-local-storage --filename /home/runner/work/k8s/k8s/kubesphere-config.yaml
-
-sleep 300
+sleep 10
 ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 22222 -l root 127.0.0.1 poweroff
-sleep 180
+sleep 60
 
 while [ true ]; do
   pid=`pgrep kubesphere-building || true`
@@ -179,6 +178,5 @@ sync
 sleep 1
 
 sleep 10
-qemu-img convert -c -f raw -O qcow2 /tmp/debian.raw /tmp/kubesphere-${KVERSION}.img
-qemu-img info /tmp/kubesphere-${KVERSION}.img
-split --verbose -d -b 1500M /tmp/kubesphere-${KVERSION}.img /tmp/kubesphere-${KVERSION}.img.
+qemu-img convert -c -f raw -O qcow2 /tmp/debian.raw /tmp/kubesphere-k8s-${KVERSION}.img
+qemu-img info /tmp/kubesphere-k8s-${KVERSION}.img
