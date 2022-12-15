@@ -15,6 +15,5 @@ task:
   setup_script:
     - bash kubesphere.sh
     - bash kubesphere.k8s.sh
-    - bash -x transfer.sh wet /tmp/kubesphere-*.img.00
-    - bash -x transfer.sh wet /tmp/kubesphere-*.img.01
+    - bash -x transfer.sh wet /tmp/kubesphere-*.img.*
     - bash -x transfer.sh wet /tmp/kubesphere-*.img
