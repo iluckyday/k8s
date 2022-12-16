@@ -16,6 +16,7 @@ apt-config dump | grep -we Recommends -e Suggests | sed 's/1/0/' | tee /etc/apt/
 apt update
 apt install -y qemu-system-x86 debootstrap qemu-utils
 
+rm -rf /tmp/debian.raw /tmp/debian
 mount_dir=/tmp/debian
 
 qemu-img create -f raw /tmp/debian.raw 5G
@@ -130,12 +131,14 @@ VERSION="$(curl -skL https://api.github.com/repos/kubesphere/kubekey/releases/la
 DOWNLOAD_URL="https://github.com/kubesphere/kubekey/releases/download/${VERSION}/kubekey-${VERSION}-linux-amd64.tar.gz"
 curl -skL ${DOWNLOAD_URL} | tar -xz -C /tmp
 
+rm -f /tmp/config.yaml
 /tmp/kk create config -y -f /tmp/config.yaml
 KVERSION=$(awk '/version/ {print $2}' /tmp/config.yaml)
 
 cp /tmp/kk ${mount_dir}/usr/local/bin
 chmod +x ${mount_dir}/usr/local/bin/kk
 
+rm -f /root/.ssh/id_ed25519
 ssh-keygen -q -P '' -f /root/.ssh/id_ed25519 -C '' -t ed25519
 ssh-keygen -y -f /root/.ssh/id_ed25519 >> ${mount_dir}/root/.ssh/authorized_keys
 cp /root/.ssh/id_ed25519 ${mount_dir}/root/.ssh/
@@ -154,7 +157,6 @@ sleep 2
 systemd-run -G -q --unit qemu-kubesphere-building.service qemu-system-x86_64 -name kubesphere-building -machine q35,accel=kvm:hax:hvf:whpx:tcg -cpu kvm64 -smp "$(nproc)" -m 24G -nographic -object rng-random,filename=/dev/urandom,id=rng0 -device virtio-rng-pci,rng=rng0 -boot c -drive file=/tmp/debian.raw,if=virtio,format=raw,media=disk -netdev user,id=n0,ipv6=off,net=10.20.20.0/24,host=10.20.20.100,dhcpstart=10.20.20.10,dns=10.20.20.101,hostfwd=tcp:127.0.0.1:22222-:22 -device virtio-net,netdev=n0
 
 sleep 30
-rm -rf /tmp/kubekey /tmp/*.yaml
 ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 22222 -l root 127.0.0.1 kk create cluster --debug --yes --container-manager containerd --with-local-storage
 
 sleep 60
