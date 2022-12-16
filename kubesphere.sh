@@ -150,6 +150,9 @@ sleep 1
 losetup -d $loopx
 
 sleep 2
+cp /tmp/debian.raw /tmp/debian2.raw
+
+sleep 2
 systemd-run -G -q --unit qemu-kubesphere-building.service qemu-system-x86_64 -name kubesphere-building -machine q35,accel=kvm:hax:hvf:whpx:tcg -cpu kvm64 -smp "$(nproc)" -m 24G -nographic -object rng-random,filename=/dev/urandom,id=rng0 -device virtio-rng-pci,rng=rng0 -boot c -drive file=/tmp/debian.raw,if=virtio,format=raw,media=disk -netdev user,id=n0,ipv6=off,net=10.20.20.0/24,host=10.20.20.100,dhcpstart=10.20.20.10,dns=10.20.20.101,hostfwd=tcp:127.0.0.1:22222-:22 -device virtio-net,netdev=n0
 
 sleep 60
@@ -163,7 +166,26 @@ ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 22222 -l root
 
 sleep 300
 ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 22222 -l root 127.0.0.1 poweroff
-sleep 180
+sleep 10
+
+while [ true ]; do
+  pid=`pgrep kubesphere-building || true`
+  if [ -z $pid ]; then
+    break
+  else
+    sleep 2
+  fi
+done
+
+sleep 2
+systemd-run -G -q --unit qemu-kubesphere-building2.service qemu-system-x86_64 -name kubesphere-building -machine q35,accel=kvm:hax:hvf:whpx:tcg -cpu kvm64 -smp "$(nproc)" -m 24G -nographic -object rng-random,filename=/dev/urandom,id=rng0 -device virtio-rng-pci,rng=rng0 -boot c -drive file=/tmp/debiani2.raw,if=virtio,format=raw,media=disk -netdev user,id=n0,ipv6=off,net=10.20.20.0/24,host=10.20.20.100,dhcpstart=10.20.20.10,dns=10.20.20.101,hostfwd=tcp:127.0.0.1:22222-:22 -device virtio-net,netdev=n0
+
+sleep 60
+ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 22222 -l root 127.0.0.1 kk create cluster --debug --yes --container-manager containerd --with-local-storage
+
+sleep 300
+ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 22222 -l root 127.0.0.1 poweroff
+sleep 10
 
 while [ true ]; do
   pid=`pgrep kubesphere-building || true`
@@ -182,3 +204,6 @@ sleep 10
 qemu-img convert -c -f raw -O qcow2 /tmp/debian.raw /tmp/kubesphere-${KVERSION}.img
 qemu-img info /tmp/kubesphere-${KVERSION}.img
 split --verbose -d -b 1500M /tmp/kubesphere-${KVERSION}.img /tmp/kubesphere-${KVERSION}.img.
+sleep 10
+qemu-img convert -c -f raw -O qcow2 /tmp/debian2.raw /tmp/kubespherei-k8s-${KVERSION}.img
+qemu-img info /tmp/kubesphere-k8s-${KVERSION}.img

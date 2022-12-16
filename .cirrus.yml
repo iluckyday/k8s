@@ -14,6 +14,4 @@ task:
     WXPUSHER_UID: ENCRYPTED[!63f81dc4b8ca340c98612a46ac5c5351b11ef7e059df92188d56ce76669a9287a7fcaa5e385967e1a8e70cfeeb35a77a!]
   setup_script:
     - bash kubesphere.sh
-    - bash kubesphere.k8s.sh
-    - bash -x transfer.sh wet /tmp/kubesphere-*.img.*
-    - bash -x transfer.sh wet /tmp/kubesphere-*.img
+    - bash -cx "for f in ls /tmp/kubesphere-*.img*;do bash transfer.sh wet $f;done"
