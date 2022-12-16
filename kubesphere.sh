@@ -190,5 +190,5 @@ qemu-img convert -c -f raw -O qcow2 /tmp/debian.raw /tmp/kubesphere-${KVERSION}.
 qemu-img info /tmp/kubesphere-${KVERSION}.img
 split --verbose -d -b 1500M /tmp/kubesphere-${KVERSION}.img /tmp/kubesphere-${KVERSION}.img.
 sleep 10
-qemu-img convert -c -f raw -O qcow2 /tmp/debian2.raw /tmp/kubespherei-k8s-${KVERSION}.img
+qemu-img convert -c -f raw -O qcow2 /tmp/debian2.raw /tmp/kubesphere-k8s-${KVERSION}.img
 qemu-img info /tmp/kubesphere-k8s-${KVERSION}.img
