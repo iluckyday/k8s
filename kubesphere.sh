@@ -88,8 +88,28 @@ IPv6AcceptRA=yes
 ClientIdentifier=mac
 EOF
 
+mkdir -p ${mount_dir}/etc/systemd/system-environment-generators
+cat << EOF > ${mount_dir}/etc/systemd/system-environment-generators/20-python
+#!/bin/sh
+echo 'PYTHONDONTWRITEBYTECODE=1'
+echo 'PYTHONSTARTUP=/usr/lib/pythonstartup'
+EOF
+chmod +x ${mount_dir}/etc/systemd/system-environment-generators/20-python
+
+cat << EOF > ${mount_dir}/etc/profile.d/python.sh
+#!/bin/sh
+export PYTHONDONTWRITEBYTECODE=1 PYTHONSTARTUP=/usr/lib/pythonstartup
+EOF
+
+cat << EOF > ${mount_dir}/usr/lib/pythonstartup
+import readline
+import time
+readline.add_history("# " + time.asctime())
+readline.set_history_length(-1)
+EOF
+
 cat << EOF > ${mount_dir}/root/.bashrc
-export HISTSIZE=1000 LESSHISTFILE=/dev/null HISTFILE=/dev/null
+export HISTSIZE=1000 LESSHISTFILE=/dev/null HISTFILE=/dev/null PYTHONDONTWRITEBYTECODE=1 PYTHONSTARTUP=/usr/lib/pythonstartup
 EOF
 
 mkdir -p ${mount_dir}/boot/syslinux
@@ -119,6 +139,7 @@ echo kubesphere > /etc/hostname
 sed -i '/src/d' /etc/apt/sources.list
 rm -rf /etc/localtime /usr/share/doc /usr/share/man /tmp/* /var/log/* /var/tmp/* /var/cache/apt/* /var/lib/apt/lists/* /usr/bin/perl*.* /usr/bin/systemd-analyze /lib/modules/5.6.0-2-cloud-amd64/kernel/drivers/net/ethernet/ /boot/System.map-*
 find /usr/*/locale -mindepth 1 -maxdepth 1 ! -name 'en' -prune -exec rm -rf {} +
+find /usr -type d -name __pycache__ -prune -exec rm -rf {} +
 "
 # cat << EOF >> ${mount_dir}/etc/containerd/config.toml
 # [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
