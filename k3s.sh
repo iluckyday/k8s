@@ -105,7 +105,7 @@ curl -L -o ${mount_dir}/root/kubevirt/cdi-cr.yaml https://github.com/kubevirt/co
 
 curl -L -o ${mount_dir}/root/kubevirt/vm.yaml https://kubevirt.io/labs/manifests/vm.yaml
 
-images=$(find ${mount_dir}/root -type f -name *.yaml | xargs awk -F'image: ' '/image:/ {print $2}')
+images=$(find ${mount_dir}/root -type f -name *.yaml | xargs awk -F'image: ' '/image:/ {print $2}' | grep -v 'kata-deploy:stable')
 echo "${images}"
 xargs -n1 docker pull <<< "${images}"
 docker save ${images} | zstd -T0 -f --long=25 - -o ${mount_dir}/var/lib/rancher/k3s/agent/images/images.tar.zst
