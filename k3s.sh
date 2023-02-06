@@ -104,6 +104,8 @@ curl -L -o ${mount_dir}/root/kubevirt/cdi-cr.yaml https://github.com/kubevirt/co
 
 curl -L -o ${mount_dir}/root/kubevirt/vm.yaml https://kubevirt.io/labs/manifests/vm.yaml
 
+ls -lR ${mount_dir}/root
+
 images=$(find ${mount_dir}/root -type f -name *.yaml | xargs awk -F'image: ' '/image:/ {print $2}')
 echo "${images}"
 xargs -n1 docker pull <<< "${images}"
