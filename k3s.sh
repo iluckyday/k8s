@@ -87,8 +87,8 @@ mkdir -p ${mount_dir}/root/kata-containers/tools/packaging/kata-deploy
 mkdir -p ${mount_dir}/root/kata-containers/tools/packaging/kata-deploy/kata-rbac/base
 mkdir -p ${mount_dir}/root/kata-containers/tools/packaging/kata-deploy/kata-deploy/overlays
 
-cp kata-containers/kata-containers/tools/packaging/kata-deploy/kata-rbac/base/kata-rbac.yaml ${mount_dir}/root/kata-containers/tools/packaging/kata-deploy/kata-rbac/base
-cp -r kata-containers/kata-containers/tools/packaging/kata-deploy/kata-deploy/overlays/k3s ${mount_dir}/root/kata-containers/tools/packaging/kata-deploy/kata-deploy/overlays
+cp kata-containers/tools/packaging/kata-deploy/kata-rbac/base/kata-rbac.yaml ${mount_dir}/root/kata-containers/tools/packaging/kata-deploy/kata-rbac/base
+cp -r kata-containers/tools/packaging/kata-deploy/kata-deploy/overlays/k3s ${mount_dir}/root/kata-containers/tools/packaging/kata-deploy/kata-deploy/overlays
 
 mkdir -p ${mount_dir}/root/kubevirt
 KUBEVIRT_VERSION=$(curl -s https://api.github.com/repos/kubevirt/kubevirt/releases | grep tag_name | grep -v -- '-rc' | head -1 | awk -F': ' '{print $2}' | sed 's/,//' | xargs)
