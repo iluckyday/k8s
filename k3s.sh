@@ -88,6 +88,7 @@ mkdir -p ${mount_dir}/root/kata-containers/tools/packaging/kata-deploy/kata-rbac
 mkdir -p ${mount_dir}/root/kata-containers/tools/packaging/kata-deploy/kata-deploy/overlays
 
 cp kata-containers/tools/packaging/kata-deploy/kata-rbac/base/kata-rbac.yaml ${mount_dir}/root/kata-containers/tools/packaging/kata-deploy/kata-rbac/base
+cp -r kata-containers/tools/packaging/kata-deploy/kata-deploy/base ${mount_dir}/root/kata-containers/tools/packaging/kata-deploy/kata-deploy
 cp -r kata-containers/tools/packaging/kata-deploy/kata-deploy/overlays/k3s ${mount_dir}/root/kata-containers/tools/packaging/kata-deploy/kata-deploy/overlays
 
 mkdir -p ${mount_dir}/root/kubevirt
@@ -103,8 +104,6 @@ curl -L -o ${mount_dir}/root/kubevirt/cdi-operator.yaml https://github.com/kubev
 curl -L -o ${mount_dir}/root/kubevirt/cdi-cr.yaml https://github.com/kubevirt/containerized-data-importer/releases/download/${CDI_VERSION}/cdi-cr.yaml
 
 curl -L -o ${mount_dir}/root/kubevirt/vm.yaml https://kubevirt.io/labs/manifests/vm.yaml
-
-ls -lR ${mount_dir}/root
 
 images=$(find ${mount_dir}/root -type f -name *.yaml | xargs awk -F'image: ' '/image:/ {print $2}')
 echo "${images}"
