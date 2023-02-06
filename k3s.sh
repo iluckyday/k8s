@@ -82,7 +82,7 @@ for cmd in kubectl crictl ctr; do
 done
 
 cd /tmp
-git clone github.com/kata-containers/kata-containers
+git clone https://github.com/kata-containers/kata-containers
 mkdir -p ${mount_dir}/root/kata-containers/tools/packaging/kata-deploy
 mkdir -p ${mount_dir}/root/kata-containers/tools/packaging/kata-deploy/kata-rbac/base
 mkdir -p ${mount_dir}/root/kata-containers/tools/packaging/kata-deploy/kata-deploy/overlays
@@ -106,7 +106,7 @@ curl -L -o ${mount_dir}/root/kubevirt/vm.yaml https://kubevirt.io/labs/manifests
 
 images=$(find ${mount_dir}/root -type f -name *.yaml | xargs awk -F'image: ' '/image:/ {print $2}')
 xargs -n1 docker pull <<< "${images}"
-docker save ${images} | zstd --no-progress -T0 -16 -f --long=25 - -o ${mount_dir}/var/lib/rancher/k3s/agent/images/images.tar.zst
+docker save ${images} | zstd -T0 -f --long=25 - -o ${mount_dir}/var/lib/rancher/k3s/agent/images/images.tar.zst
 
 chroot ${mount_dir} /bin/sh -c "
 dd bs=440 count=1 if=/usr/share/syslinux/mbr.bin of=$dev
