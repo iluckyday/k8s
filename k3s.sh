@@ -81,6 +81,33 @@ for cmd in kubectl crictl ctr; do
 	ln -sf /usr/bin/k3s ${mount_dir}/usr/bin/${cmd}
 done
 
+cd /tmp
+git clone github.com/kata-containers/kata-containers
+mkdir -p ${mount_dir}/root/kata-containers/tools/packaging/kata-deploy
+mkdir -p ${mount_dir}/root/kata-containers/tools/packaging/kata-deploy/kata-rbac/base
+mkdir -p ${mount_dir}/root/kata-containers/tools/packaging/kata-deploy/kata-deploy/overlays
+
+cp kata-containers/kata-containers/tools/packaging/kata-deploy/kata-rbac/base/kata-rbac.yaml ${mount_dir}/root/kata-containers/tools/packaging/kata-deploy/kata-rbac/base
+cp -r kata-containers/kata-containers/tools/packaging/kata-deploy/kata-deploy/overlays/k3s ${mount_dir}/root/kata-containers/tools/packaging/kata-deploy/kata-deploy/overlays
+
+mkdir -p ${mount_dir}/root/kubevirt
+KUBEVIRT_VERSION=$(curl -s https://api.github.com/repos/kubevirt/kubevirt/releases | grep tag_name | grep -v -- '-rc' | head -1 | awk -F': ' '{print $2}' | sed 's/,//' | xargs)
+curl -L -o ${mount_dir}/root/kubevirt/kubevirt-operator.yaml https://github.com/kubevirt/kubevirt/releases/download/${KUBEVIRT_VERSION}/kubevirt-operator.yaml
+curl -L -o ${mount_dir}/root/kubevirt/kubevirt-cr.yaml https://github.com/kubevirt/kubevirt/releases/download/${KUBEVIRT_VERSION}/kubevirt-cr.yaml
+
+curl -L -o ${mount_dir}/usr/bin/virtctl https://github.com/kubevirt/kubevirt/releases/download/${KUBEVIRT_VERSION}/virtctl-${KUBEVIRT_VERSION}-amd64
+chmod +x ${mount_dir}/usr/bin/virtctl
+
+export CDI_VERSION=$(curl -s https://github.com/kubevirt/containerized-data-importer/releases/latest | grep -o "v[0-9]\.[0-9]*\.[0-9]*")
+curl -L -o ${mount_dir}/root/kubevirt/cdi-operator.yaml https://github.com/kubevirt/containerized-data-importer/releases/download/${CDI_VERSION}/cdi-operator.yaml
+curl -L -o ${mount_dir}/root/kubevirt/cdi-cr.yaml https://github.com/kubevirt/containerized-data-importer/releases/download/${CDI_VERSION}/cdi-cr.yaml
+
+curl -L -o ${mount_dir}/root/kubevirt/vm.yaml https://kubevirt.io/labs/manifests/vm.yaml
+
+images=$(find ${mount_dir}/root -type f -name *.yaml | xargs awk -F'image: ' '/image:/ {print $2}')
+xargs -n1 docker pull <<< "${images}"
+docker save ${images} | zstd --no-progress -T0 -16 -f --long=25 - -o ${mount_dir}/var/lib/rancher/k3s/agent/images/images.tar.zst
+
 chroot ${mount_dir} /bin/sh -c "
 dd bs=440 count=1 if=/usr/share/syslinux/mbr.bin of=$dev
 extlinux -i /boot
