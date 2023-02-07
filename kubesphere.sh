@@ -180,9 +180,10 @@ sleep 60
 journalctl -u qemu-kubesphere-building.service
 
 sleep 2
-ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 22222 -l root 127.0.0.1 kk create cluster --debug --yes --with-kubesphere --container-manager containerd --with-local-storage
+#ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 22222 -l root 127.0.0.1 kk create cluster --debug --yes --with-kubesphere --container-manager containerd --with-local-storage
 
-#ssh -q -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 22222 -l root 127.0.0.1 kk create cluster --debug --yes --with-kubesphere --container-manager containerd --with-local-storage || true
+scp -q -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -P 22222 /home/runner/work/k8s/k8s/kubesphere-config.yaml root@127.0.0.1:/root
+ssh -q -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 22222 -l root 127.0.0.1 kk create cluster --debug --yes --with-kubesphere --with-local-storage --with-security-enhancement --filename /root/kubesphere-config.yaml
 # /tmp/kk create cluster --yes --with-kubesphere --with-local-storage --filename /home/runner/work/k8s/k8s/kubesphere-config.yaml
 
 sleep 300
