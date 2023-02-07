@@ -3,7 +3,7 @@ metadata:
   name: cluster01
 spec:
   hosts:
-  - {name: kubesphere, address: 10.20.20.10, internalAddress: 10.20.20.10}
+  - {name: kubesphere, address: 10.20.20.10, internalAddress: 10.20.20.10, privateKeyPath: "~/.ssh/id_ed25519"}
   roleGroups:
     etcd:
     - kubesphere
