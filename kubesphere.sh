@@ -183,7 +183,7 @@ sleep 2
 #ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 22222 -l root 127.0.0.1 kk create cluster --debug --yes --with-kubesphere --container-manager containerd --with-local-storage
 
 scp -q -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -P 22222 kubesphere-config.yaml root@127.0.0.1:/root
-ssh -q -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 22222 -l root 127.0.0.1 kk create cluster --debug --yes --with-kubesphere --with-local-storage --with-security-enhancement --filename /root/kubesphere-config.yaml
+ssh -q -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 22222 -l root 127.0.0.1 kk create cluster --debug --yes --with-kubesphere --with-local-storage --filename /root/kubesphere-config.yaml
 # /tmp/kk create cluster --yes --with-kubesphere --with-local-storage --filename /home/runner/work/k8s/k8s/kubesphere-config.yaml
 
 sleep 300
