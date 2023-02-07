@@ -4,7 +4,7 @@ set -ex
 release=$(curl https://www.debian.org/releases/ | grep -oP 'codenamed <em>\K(.*)(?=</em>)')
 release="sid"
 include_apps="linux-image-cloud-amd64,extlinux,initramfs-tools,busybox"
-include_apps+=",systemd,systemd-resolved,systemd-timesyncd,systemd-sysv,dbus,bash-completion,openssh-server,ca-certificates,chrony"
+include_apps+=",systemd,systemd-resolved,systemd-sysv,dbus,bash-completion,openssh-server,ca-certificates"
 include_apps+=",sudo,curl,openssl,socat,conntrack,ebtables,ipset,ipvsadm,iptables,ethtool,iproute2,systemd-cron,apparmor"
 exclude_apps="unattended-upgrades"
 enable_services="systemd-networkd.service systemd-resolved.service ssh.service"

@@ -14,7 +14,6 @@ spec:
   controlPlaneEndpoint:
     internalLoadbalancer: haproxy
   system:
-    timezone: "Asia/Shanghai"
     postInstall:
       - name: clean tmps files
         bash: |
